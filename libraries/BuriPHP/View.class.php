@@ -91,7 +91,6 @@ class View
 			require_once Security::DS( $footer );
 
 		$buffer = ob_get_contents();
-		$buffer = $this->dependencies->run($buffer);
 
 		ob_end_clean();
 

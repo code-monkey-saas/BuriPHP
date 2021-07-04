@@ -31,6 +31,12 @@ class Layout
     private $security;
 
     /**
+	*
+	* @var object
+	*/
+	private $dependencies;
+
+    /**
     *
     * @var object
     */
@@ -93,6 +99,7 @@ class Layout
     {
         $this->framework = new Framework();
         $this->security = new Security();
+        $this->dependencies = new Dependencies();
         $this->render = new Render();
         $this->language = new Language();
         $this->format = new Format();
@@ -317,9 +324,10 @@ class Layout
             $buffer = $placeholders->run();
         }
 
-        $buffer = Language::get_lang($buffer);
+        $buffer = $this->dependencies->run($buffer);
         $buffer = $this->render->placeholders($buffer);
         $buffer = $this->render->paths($buffer);
+        $buffer = Language::get_lang($buffer);
 
         if ( \BuriPHP\Configuration::$compress_html === true )
         {

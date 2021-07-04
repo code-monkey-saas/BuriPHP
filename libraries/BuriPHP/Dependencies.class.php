@@ -25,7 +25,7 @@ class Dependencies
 	{
 		global $__BuriPHP_dependencies;
 
-		$__BuriPHP_dependencies = [];
+		$GLOBALS['__BuriPHP_dependencies'] = (!isset($GLOBALS['__BuriPHP_dependencies']) || !is_array($GLOBALS['__BuriPHP_dependencies'])) ? [] : $GLOBALS['__BuriPHP_dependencies'];
 	}
 
 	/**
