@@ -1,15 +1,12 @@
 "use strict";
 
-!function ( $ )
-{
+!function ($) {
     "use strict"
 
-    const app = function () {}
+    const app = function () { }
 
-    app.prototype.onload = function ()
-    {
-        window.addEventListener("load", function( event )
-        {
+    app.prototype.onload = function () {
+        window.addEventListener("load", function (event) {
             $('#status').fadeOut()
             $('#preloader').delay(350).fadeOut('slow')
             $('body').delay(350).css({
@@ -18,197 +15,129 @@
         })
     },
 
-    app.prototype.onResize = function ()
-    {
-        window.addEventListener('resize', function ( e )
-        {
-            window.requestAnimationFrame(function ()
-            {
+    app.prototype.onResize = function () {
+        window.addEventListener('resize', function (e) {
+            window.requestAnimationFrame(function () {
                 $.app.responsiveDropmenu()
+                $.app.fullscreenModals()
             })
         })
     },
 
-    app.prototype.responsiveDropmenu = function ()
-    {
-        if ( $( window ).width() <= 991 )
-        {
+    app.prototype.responsiveDropmenu = function () {
+        if ($(window).width() <= 991) {
             $('.dropmenu.mobile-responsive.menu-right').addClass('menu-right-none').removeClass('menu-right');
         }
-        else
-        {
+        else {
             $('.dropmenu.mobile-responsive.menu-right-none').addClass('menu-right').removeClass('menu-right-none');
         }
     },
 
-    app.prototype.tableSearch = function ()
-    {
-        $( "form[name='search'] > input[name='search']" ).keyup(function ()
-        {
+    app.prototype.tableSearch = function () {
+        $("form[name='search'] > input[name='search']").keyup(function () {
             let form = $(this).parents('form');
             let input = $(this);
             let filter = $.app.normalize(input[0].value.toLowerCase());
-            let table = $('#'+ form.data('table-target'));
+            let table = $('#' + form.data('table-target'));
             let tds = table.find('tbody tr > td');
             let txtValue;
 
             table.find('tbody > tr').hide();
 
-            for ( const td of tds )
-            {
+            for (const td of tds) {
                 txtValue = td.textContent || td.innerText;
                 txtValue = txtValue.split(/\s+/).join(' ').trim().toLowerCase();
                 txtValue = $.app.normalize(txtValue);
 
-                if ( txtValue.indexOf(filter) > -1 )
+                if (txtValue.indexOf(filter) > -1)
                     $(td).parents('tr').show();
             }
         });
     },
 
-    app.prototype.normalize = function ( str )
-    {
+    app.prototype.normalize = function (str) {
         let from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
-            to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
+            to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
             mapping = {};
 
-        for ( var i = 0, j = from.length; i < j; i++ )
-            mapping[ from.charAt( i ) ] = to.charAt( i );
+        for (var i = 0, j = from.length; i < j; i++)
+            mapping[from.charAt(i)] = to.charAt(i);
 
         let ret = [];
-        for( var i = 0, j = str.length; i < j; i++ )
-        {
-            let c = str.charAt( i );
-            if( mapping.hasOwnProperty( str.charAt( i ) ) )
-                ret.push( mapping[ c ] );
+        for (var i = 0, j = str.length; i < j; i++) {
+            let c = str.charAt(i);
+            if (mapping.hasOwnProperty(str.charAt(i)))
+                ret.push(mapping[c]);
             else
-                ret.push( c );
+                ret.push(c);
         }
-        return ret.join( '' );
+        return ret.join('');
     },
 
-    app.prototype.createUrl = function ()
-    {
-        $( document ).on('keyup', '[data-base-url]', function ()
-        {
-            let self = $(this);
-            let value = self.val();
-            let target = self.data('base-url');
-
-            let ajax = $(document).ajaxSubmit({
-                url: 'index.php?c=System&m=get_url',
-                typeSend: 'manual',
-                disableButton: false,
-                data: {
-                    string: value
-                },
-                callback: function( response )
-                {
-                    $(target).text( response.url );
-                }
-            });
-
-            ajax.send();
-        });
-    },
-
-    app.prototype.uploadImagePreview = function ()
-    {
-        $( document ).on('change', '.upload_image_preview > input[type="file"]', function ()
-        {
+    app.prototype.uploadImagePreview = function () {
+        $(document).on('change', '.upload_image_preview > input[type="file"]', function () {
             let self = $(this);
             let container = self.parents('.upload_image_preview');
 
             container.find('.loading').remove();
             container.prepend('<div class="loading elm-stretched d-flex flex-column justify-content-center align-items-center"><div class="loading-data-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>');
 
-            if ( self[0].files[0] )
-            {
+            if (self[0].files[0]) {
                 let ajax = $(document).ajaxSubmit({
-                    url: 'index.php?c=System&m=validate_image',
+                    url: '?validate=image',
                     typeSend: 'manual',
                     disableButton: false,
                     data: {
                         image: self[0].files[0]
                     },
-                    callback: function( response )
-                    {
-                        if ( response.status == 'OK' )
-                        {
-                            let reader = new FileReader();
+                    onFatalError: function (response) {
+                        alertify.error(response.message);
 
-                            reader.onload = function (e)
-                            {
-                                self[0].dispatchEvent( new CustomEvent('imageIsValid', {bubbles: true, detail: {self: self, container: container, image: e.target.result, token: response.token}}) )
-                            };
+                        self[0].dispatchEvent(new CustomEvent('imageIsInvalid', { bubbles: true, detail: { self: self, container: container } }))
+                    },
+                    success: function (response) {
+                        let reader = new FileReader();
 
-                            reader.readAsDataURL(self[0].files[0]);
-                        }
+                        reader.onload = function (e) {
+                            self[0].dispatchEvent(new CustomEvent('imageIsValid', { bubbles: true, detail: { self: self, container: container, image: e.target.result, token: response.token } }))
+                        };
 
-                        if ( response.status == 'fatal_error' )
-                        {
-                            alertify.error(response.message);
-
-                            self[0].dispatchEvent( new CustomEvent('imageIsInvalid', {bubbles: true, detail: {self: self, container: container}}) )
-                        }
+                        reader.readAsDataURL(self[0].files[0]);
                     }
                 });
 
                 ajax.send();
             }
+            else {
+                let image = $('<figure/>', { class: 'm-0' }).append(
+                    $('<img/>', { class: 'img-fluid', src: container.data('image-default') })
+                );
 
-            setTimeout(function ()
-            {
+                container.find('> figure').remove();
+                container.prepend(image);
+                self.val('');
+            }
+
+            setTimeout(function () {
                 container.find('.loading').remove();
             }, 500);
         });
-
-        $( document ).on('click', '.upload_image_preview > .btn[delete-elm]', function ()
-        {
-            let button = $(this);
-            let container = button.parents('.upload_image_preview');
-
-            swal({
-                text: '¿Deseas eliminar la imágen de la galería?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#54cc96',
-                cancelButtonColor: '#ff5560',
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar',
-                showLoaderOnConfirm: true,
-                allowOutsideClick: false,
-                preConfirm: function ()
-                {
-                    return new Promise(function (resolve)
-                    {
-                        container.remove();
-
-                        setTimeout(function ()
-                        {
-                            resolve();
-                        }, 200);
-                    });
-                }
-            });
-        });
     },
 
-    app.prototype.editorTinymce = function ()
-    {
+    app.prototype.editorTinymce = function (selector = "") {
         tinymce.init({
-            selector: '[name="description"]',
+            selector: selector,
             height: 400,
             plugins: [
-                'advlist autolink lists link image charmap preview textcolor searchreplace visualblocks code fullscreen insertdatetime media table paste code help autosave hr'
+                'advlist autolink lists link image charmap preview textcolor searchreplace visualblocks code fullscreen insertdatetime media table paste code help hr'
             ],
             menu: {
-                edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall'},
-                insert: {title: 'Insert', items: 'link image media | hr | insertdatetime'},
-                view: {title: 'View', items: 'visualblocks visualaid'},
-                format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
-                table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
-                tools: {title: 'Tools', items: 'searchreplace charmap code help'}
+                edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall' },
+                insert: { title: 'Insert', items: 'link image media | hr | insertdatetime' },
+                view: { title: 'View', items: 'visualblocks visualaid' },
+                format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript | formats | removeformat' },
+                table: { title: 'Table', items: 'inserttable tableprops deletetable | cell row column' },
+                tools: { title: 'Tools', items: 'searchreplace charmap code help' }
             },
             toolbar: [
                 'restoredraft undo redo | cut copy paste | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image link | code fullscreen'
@@ -230,32 +159,92 @@
         });
     },
 
-    app.prototype.init = function ()
-    {
+    app.prototype.fullscreenModals = function () {
+        if ($(window).width() <= 991) $('[data-modal]:not(.not-resize)').addClass('fullscreen')
+        else $('[data-modal]').removeClass('fullscreen')
+    },
+
+    app.prototype.checkNumbersInput = function (e) {
+        let key = (document.all) ? e.keyCode : e.which;
+
+        if (key == 8) {
+            return true;
+        }
+
+        let patron = /[.0-9]/;
+        let end_key = String.fromCharCode(key);
+        return patron.test(end_key);
+    },
+
+    app.prototype.onlyNumbers = function ( e ) {
+        let string = e.target.value.replace(/[^.0-9]/g, '')
+
+        $(e.target).val(string)
+    },
+
+    app.prototype.removeElementTarget = function (elm = null) {
+        if (elm != null) {
+            $(elm).remove();
+        }
+    },
+
+    app.prototype.addButtonsAction = function (obj = null) {
+        let html = $('.navigation-actions');
+        for (let [key, value] of Object.entries(obj)) {
+            
+            let li = $('<li/>', {class: 'm-l-5'});
+
+            switch (key) {
+                case 'dropdown':
+                    let dropmenu = $('<div/>', { class: 'dropmenu menu-right' });
+                    let submenu = $('<div/>', { class: 'dropdown' });
+                    let callButton = $('<button/>', { class: 'btn waves-effect waves-light', text: value.label });
+                    let icon = $('<i/>', { class: 'fa fa-caret-down m-l-5' });
+
+                    for (let _ of Object.entries(value.dropdown))
+                    {
+                        submenu.append($('<a/>', _[1]))
+                    }
+
+                    callButton.append(icon);
+                    dropmenu.append(callButton, submenu);
+
+                    li.append(dropmenu);
+                    break;
+
+                case 'button':
+                    let button = $('<a/>', value);
+                    li.append(button);
+                    break;
+            }
+
+            html.append(li);
+        }
+    },
+
+    app.prototype.init = function () {
         this.onload()
         this.onResize()
         this.responsiveDropmenu()
+        this.fullscreenModals()
 
-        $( document ).on('click', 'li.menu-item > #trigger-nav-mobile', function ( event )
-        {
+        $(document).on('click', 'li.menu-item > #trigger-nav-mobile', function (event) {
             event.stopPropagation()
 
             $(this).find('> .hamburger-menu').toggleClass('animate');
-            $('nav.navbar-custom').toggleClass('active')
+            $('body').toggleClass('open-sidebar-menu')
         })
 
-        $( document ).on('click', 'nav.navbar-custom', function ( event )
-        {
-            if ( $(window).width() < 767 )
+        $(document).on('click', 'nav.navbar-custom', function (event) {
+            if ($(window).width() < 767)
                 event.stopPropagation()
         })
     }
 
     $.app = new app
     $.app.Constructor = app
-}( window.jQuery ),
+}(window.jQuery),
 
-function ( $ )
-{
+function ($) {
     $.app.init()
-}( window.jQuery )
+}(window.jQuery)

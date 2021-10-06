@@ -11,7 +11,7 @@ use \BuriPHP\System\Libraries\{Session};
 		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
 		{$dependencies.meta}
 
-		<base href="{$_base}">
+		<base href="{$_base}<?= ADMINISTRATOR ?>/">
 
 		<title>{$_title}</title>
 
@@ -36,7 +36,7 @@ use \BuriPHP\System\Libraries\{Session};
 		<!-- Navigation Bar-->
 		<header class="topnav d-print-none">
 			<div class="topbar-main">
-				<div class="container-fluid">
+				<div class="container-fluid" style="width: 100%;">
 					<figure class="logo">
 						<a href="javascript:void(0);">
 							<img src="{$path.images}logotype-sm-white.svg" alt="Logotipo" height="50" class="logo-sm">
@@ -49,7 +49,7 @@ use \BuriPHP\System\Libraries\{Session};
 							<!-- User -->
 							<li class="list-inline-item">
 								<div class="dropmenu menu-right">
-									<button class="btn btn-b-none waves-effect waves-light"><span class="status_session"></span> <?= Session::get_value('__user') ?></button>
+									<button class="btn btn-b-none waves-effect waves-light no-focus"><span class="status_session"></span> <?= Session::get_value('__user') ?></button>
 									<div class="dropdown">
 										<?php if ( in_array('{users_read}', Session::get_value('session_permissions')) ): ?>
 											<a href="index.php/users">Usuarios</a>
@@ -62,27 +62,34 @@ use \BuriPHP\System\Libraries\{Session};
 									</div>
 								</div>
 							</li>
-							<!-- Mobile menu toggle -->
-							<li class="list-inline-item menu-item">
-								<button id="trigger-nav-mobile" type="button" class="btn btn-b-none waves-effect waves-light menu-wrapper">
-									<div class="hamburger-menu"></div>
-								</button>
-							</li>
 						</ul>
 					</div>
 				</div>
 			</div>
 			<nav class="navbar-custom">
-				<div class="container-fluid">
+				<div class="container-fluid d-flex justify-content-between align-items-center">
+					<ul class="navigation-menu list-inline m-0">
+						<li class="menu-item visible-phone visible-tablet">
+							<button id="trigger-nav-mobile" type="button" class="btn btn-b-none waves-effect waves-light menu-wrapper">
+								<div class="hamburger-menu"></div>
+							</button>
+						</li>
+					</ul>
+					<ul class="navigation-actions list-inline justify-content-end m-0">
+					</ul>
+				</div>
+			</nav>
+			<div class="sidebar">
+				<nav class="main-menu">
 					<ul class="navigation-menu list-inline">
 						<?php foreach ( Dashboard::main_menu() as $value ): ?>
 							<li <?= ( isset( $value['submenu'] ) ) ? 'class="has-submenu"' : '' ?>>
-								<a href="<?= $value['url'] ?>" <?= ( isset($value['target']) ) ? "target=\"{$value['target']}\"" : "" ?>><?= ( isset($value['icon']) ) ? "<i class='{$value['icon']}'></i>" : "" ?> <?= $value['name'] ?></a>
+								<a href="<?= $value['url'] ?>" <?= ( isset($value['target']) ) ? "target=\"{$value['target']}\"" : "" ?> ><?= ( isset($value['icon']) ) ? "<i class='{$value['icon']}'></i>" : "" ?> <?= $value['name'] ?></a>
 								<?php if ( isset( $value['submenu'] ) ): ?>
-									<ul class="submenu">
+									<ul class="submenu list-unstyled">
 										<?php foreach ( $value['submenu'] as $submenu ): ?>
 											<li>
-												<a href="<?= $submenu['url'] ?>"><?= $submenu['name'] ?></a>
+												<a href="<?= $submenu['url'] ?>" <?= ( isset($submenu['target']) ) ? "target=\"{$submenu['target']}\"" : "" ?> ><?= ( isset($submenu['icon']) ) ? "<i class='{$submenu['icon']}'></i>" : "" ?> <?= $submenu['name'] ?></a>
 											</li>
 										<?php endforeach; ?>
 									</ul>
@@ -90,7 +97,9 @@ use \BuriPHP\System\Libraries\{Session};
 							</li>
 						<?php endforeach; ?>
 					</ul>
-				</div>
-			</nav>
+				</nav>
+			</div>
 		</header>
 		<!-- End Navigation Bar-->
+
+		

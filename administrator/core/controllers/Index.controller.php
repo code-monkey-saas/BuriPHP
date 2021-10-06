@@ -9,12 +9,12 @@ class Index
 	public function index()
 	{
 		define('_title', 'Dashboard');
-		return $this->view->render(PATH_ADMINISTRATOR_LAYOUTS . 'Pages/index.php');
+		return $this->view->render(PATH_ADMINISTRATOR_LAYOUTS . 'Index/index.php');
 	}
 
 	public function help()
 	{
 		define('_title', 'Framework Valkyrie');
-		return $this->view->render(PATH_ADMINISTRATOR_LAYOUTS . 'Pages/help.php');
+		return $this->view->render(PATH_ADMINISTRATOR_LAYOUTS . 'Index/help.php');
 	}
 }

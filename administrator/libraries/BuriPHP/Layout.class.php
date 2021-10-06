@@ -14,7 +14,7 @@
 
 defined('_EXEC') or die;
 
-use \BuriPHP\System\Libraries\{Framework,Security,Render,Language,Format,Errors,Controller,Session};
+use \BuriPHP\System\Libraries\{Framework,Security,Render,Language,Format,Errors,Controller,Session,Dependencies};
 use \BuriPHP\Administrator\Libraries\{Urls_registered,Routes,Placeholders};
 
 class Layout
@@ -30,6 +30,12 @@ class Layout
     * @var object
     */
     private $security;
+
+    /**
+	*
+	* @var object
+	*/
+	private $dependencies;
 
     /**
     *
@@ -94,6 +100,7 @@ class Layout
     {
         $this->framework = new Framework();
         $this->security = new Security();
+        $this->dependencies = new Dependencies();
         $this->render = new Render();
         $this->language = new Language();
         $this->format = new Format();
@@ -314,9 +321,10 @@ class Layout
             $buffer = $placeholders->run();
         }
 
-        $buffer = Language::get_lang($buffer);
+        $buffer = $this->dependencies->run($buffer);
         $buffer = $this->render->placeholders($buffer);
         $buffer = $this->render->paths($buffer);
+        $buffer = Language::get_lang($buffer);
 
         if ( \BuriPHP\Configuration::$compress_html === true )
         {

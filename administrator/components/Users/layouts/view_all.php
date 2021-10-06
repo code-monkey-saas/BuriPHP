@@ -12,6 +12,31 @@ $this->dependencies->add(['js', '{$path.components}Users/assets/create.js']);
 $this->dependencies->add(['js', '{$path.components}Users/assets/view.js']);
 $this->dependencies->add(['js', '{$path.components}Users/assets/update.js']);
 $this->dependencies->add(['js', '{$path.components}Users/assets/delete.js']);
+
+// Buttons
+if ( in_array('{users_create}', Session::get_value('session_permissions')) )
+{
+    $this->dependencies->add(['other', '<script>$.app.addButtonsAction({
+        "button": {
+            "text": "Nuevo usuario",
+            "class": "btn btn-success waves-effect waves-light",
+            "href": "javascript:void(0);",
+            "data-button-modal": "users_create",
+        }
+    })</script>']);
+}
+
+if ( in_array('{permissions_read}', Session::get_value('session_permissions')) )
+{
+    $this->dependencies->add(['other', '<script>$.app.addButtonsAction({
+        "button": {
+            "text": "Permisos de usuario",
+            "class": "btn waves-effect waves-light",
+            "href": "javascript:void(0);",
+            "data-button-modal": "permissions",
+        }
+    })</script>']);
+}
 ?>
 <main class="wrapper">
     <div class="container-fluid">
@@ -33,16 +58,6 @@ $this->dependencies->add(['js', '{$path.components}Users/assets/delete.js']);
         <!-- end page title end breadcrumb -->
 
         <div class="row">
-            <div class="col-12 m-b-20 d-print-none">
-                <div class="button-items text-lg-right">
-                    <?php if ( in_array('{users_create}', Session::get_value('session_permissions')) ): ?>
-                        <button class="btn btn-success waves-effect waves-light" type="button" data-button-modal="users_create">Nuevo usuario</button>
-                    <?php endif; ?>
-                    <?php if ( in_array('{permissions_read}', Session::get_value('session_permissions')) ): ?>
-                        <button class="btn waves-effect waves-light" type="button" data-button-modal="permissions">Permisos de usuario</button>
-                    <?php endif; ?>
-                </div>
-            </div>
             <div class="col-sm-12">
                 <div class="card m-b-30">
                     <div class="card-body">
@@ -166,7 +181,7 @@ $this->dependencies->add(['js', '{$path.components}Users/assets/delete.js']);
                                 </div>
                             </div>
                             <div class="col-12 col-md-4 m-b-10">
-                                <button type="submit" class="btn btn-block m-t-10">Agregar</button>
+                                <button type="submit" class="btn btn-block" style="height: 50px">Agregar</button>
                             </div>
                         </div>
                     </form>

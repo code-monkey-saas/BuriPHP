@@ -5,7 +5,7 @@
 		<meta charset="UTF-8" />
 		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
 
-		<base href="{$_base}">
+		<base href="{$_base}<?= ADMINISTRATOR ?>/">
 
 		<title>{$_title}</title>
 

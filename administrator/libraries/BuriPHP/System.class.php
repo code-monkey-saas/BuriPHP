@@ -110,4 +110,22 @@ class System
             return false;
         }
     }
+
+    public static function import_urls_component( $component = null )
+    {
+        if ( is_null($component) )
+            return [];
+
+        $uri = Security::DS(PATH_ADMINISTRATOR_COMPONENTS . $component . '/Component.class.php');
+
+        if ( file_exists($uri) )
+        {
+            require_once $uri;
+            $namespace = "\BuriPHP\Administrator\Components\\". $component ."\Component";
+
+            return $namespace::urls();
+        }
+        else
+            return [];
+    }
 }

@@ -14,7 +14,7 @@
 
 defined('_EXEC') or die;
 
-use \BuriPHP\System\Libraries\{Format,Errors};
+use \BuriPHP\System\Libraries\{Format,Errors,Security};
 
 class Routes
 {
@@ -40,6 +40,33 @@ class Routes
                 case 'ajax':
                     if ( Format::exist_ajax_request() == false ) die();
                     break;
+            }
+        }
+
+        if ( isset($_GET['validate']) && $_GET['validate'] === 'image' )
+        {
+            if ( Format::exist_ajax_request() == true )
+            {
+                $image = Upload::validate_file($_FILES['image'], ['jpg', 'jpeg', 'png']);
+
+                if ( $image['status'] == 'OK' )
+                {
+                    $token = (new Security())->random_string('5');
+
+                    echo json_encode([
+                        'status' => 'OK',
+                        'token' => $token
+                    ], JSON_PRETTY_PRINT);
+                }
+                else
+                {
+                    echo json_encode([
+                        'status' => 'fatal_error',
+                        'message' => $image['message']
+                    ], JSON_PRETTY_PRINT);
+                }
+
+                die();
             }
         }
     }
