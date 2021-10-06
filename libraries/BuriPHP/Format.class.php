@@ -87,7 +87,7 @@ class Format
 	public function baseurl()
 	{
 		$uri = $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
-		$uri = str_replace('index.php', '', $uri);
+		$uri = str_replace(['index.php', ADMINISTRATOR.'/'], '', $uri);
 
 		return Security::protocol() . $uri;
 	}
