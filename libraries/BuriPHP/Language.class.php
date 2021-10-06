@@ -68,7 +68,7 @@ class Language
         $lang_default = Security::DS(self::$path_language . \BuriPHP\Configuration::$lang_default . '.ini');
 
         if ( !file_exists($lang_default) ) Errors::system('language_default_not_found', "File: {$lang_default}");
-        if ( Session::exists_var('lang') == false ) Session::set_value('_lang', \BuriPHP\Configuration::$lang_default);
+        if ( Session::exists_var('_lang') == false ) Session::set_value('_lang', \BuriPHP\Configuration::$lang_default);
         if ( !file_exists(Security::DS(self::$path_language . Session::get_value('_lang') . '.ini')) ) setcookie('_lang', \BuriPHP\Configuration::$lang_default, time() + (86400 * 30), "/");
     }
 
@@ -116,7 +116,6 @@ class Language
 
             if ( base64_encode(base64_decode($ref, true)) === $ref ) $ref = base64_decode($ref);
 
-
             if ( empty($ref) )
             {
                 $base = $_SERVER['REQUEST_URI'];
@@ -140,5 +139,40 @@ class Language
     public static function get_lang_url( $lang )
     {
         return "lang={$lang}&ref=" . base64_encode($_SERVER['REQUEST_URI']);
+    }
+
+    /**
+    * Obtiene los idiomas disponibles.
+    *
+    * @static
+    *
+    * @return  array
+    */
+    public function get_list_language()
+    {
+        $route = PATH_LANGUAGE;
+        $codes_language_iso = $this->format->import_file(PATH_ADMINISTRATOR_INCLUDES, 'codes_language_iso', 'json');
+        $langs = [];
+        
+        // Abre un gestor de directorios para la ruta indicada
+        $manager = opendir($route);
+
+        // Recorre todos los elementos del directorio
+        while ( ($file = readdir($manager)) !== false )
+        {
+            // Se muestran todos los archivos y carpetas excepto "." y ".."
+            if ($file != "." && $file != ".." && strlen(pathinfo($file, PATHINFO_FILENAME)) === 2 && !strpos($file, '_') && !is_dir(Security::DS($route . "/" . $file)) )
+            {
+                $code = pathinfo($file, PATHINFO_FILENAME);
+                $key = array_search($code, array_column($codes_language_iso, 'iso1'));
+
+                $langs[] = $codes_language_iso[$key];
+            }
+        }
+        
+        // Cierra el gestor de directorios
+        closedir($manager);
+
+        return $langs;
     }
 }
