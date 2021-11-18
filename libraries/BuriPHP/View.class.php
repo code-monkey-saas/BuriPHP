@@ -78,17 +78,17 @@ class View
 		ob_start();
 
 		if ( is_null($head) )
-			require_once Security::DS(( Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS ) . "/head.php");
+			require Security::DS(( Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS ) . "/head.php");
 		if ( $head != false && !is_null($head) )
-			require_once Security::DS( $head );
+			require Security::DS( $head );
 
 		if ( !is_null($body) )
-			require_once Security::DS( $body );
+			require Security::DS( $body );
 
 		if ( is_null($footer) )
-			require_once Security::DS(( Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS ) . "/footer.php");
+			require Security::DS(( Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS ) . "/footer.php");
 		if ( $footer != false && !is_null($footer) )
-			require_once Security::DS( $footer );
+			require Security::DS( $footer );
 
 		$buffer = ob_get_contents();
 
