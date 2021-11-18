@@ -235,12 +235,15 @@ class Layout
         if ( !isset($argv['component']) || empty($argv['component']) )
             $argv['component'] = null;
 
+        if ( !isset($argv['params']) || empty($argv['params']) )
+            $argv['params'] = [];
+
         $this->component = $argv['component'];
         $this->controller = $argv['controller'];
         $this->method = $argv['method'];
-        $this->params = [];
+        $this->params = $argv['params'];
 
-        unset($argv['component'],$argv['controller'],$argv['method']);
+        unset($argv['component'],$argv['controller'],$argv['method'],$argv['params']);
 
         $this->settins_url = $argv;
     }
