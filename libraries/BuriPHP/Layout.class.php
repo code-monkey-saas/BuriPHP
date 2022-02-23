@@ -31,6 +31,12 @@ class Layout
     private $security;
 
     /**
+	*
+	* @var object
+	*/
+	private $dependencies;
+
+    /**
     *
     * @var object
     */
@@ -93,6 +99,7 @@ class Layout
     {
         $this->framework = new Framework();
         $this->security = new Security();
+        $this->dependencies = new Dependencies();
         $this->render = new Render();
         $this->language = new Language();
         $this->format = new Format();
@@ -228,12 +235,18 @@ class Layout
         if ( !isset($argv['component']) || empty($argv['component']) )
             $argv['component'] = null;
 
+        if ( !isset($argv['params']) || empty($argv['params']) )
+            $argv['params'] = [];
+        
+        if ( isset($_GET) )
+            $argv['params'] = array_merge($argv['params'], $_GET);
+
         $this->component = $argv['component'];
         $this->controller = $argv['controller'];
         $this->method = $argv['method'];
-        $this->params = [];
+        $this->params = $argv['params'];
 
-        unset($argv['component'],$argv['controller'],$argv['method']);
+        unset($argv['component'],$argv['controller'],$argv['method'],$argv['params']);
 
         $this->settins_url = $argv;
     }
@@ -317,9 +330,10 @@ class Layout
             $buffer = $placeholders->run();
         }
 
-        $buffer = Language::get_lang($buffer);
+        $buffer = $this->dependencies->run($buffer);
         $buffer = $this->render->placeholders($buffer);
         $buffer = $this->render->paths($buffer);
+        $buffer = Language::get_lang($buffer);
 
         if ( \BuriPHP\Configuration::$compress_html === true )
         {
