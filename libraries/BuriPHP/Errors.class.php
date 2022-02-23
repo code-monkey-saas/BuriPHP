@@ -46,16 +46,34 @@ class Errors
     * @static
     *
     * @param   string    $error    Tipo de error http para mostrar.
-    * @param   string    $message  Mensaje personalizado.
     *
     * @return  void
     */
-    public static function http( $error = false, $message = "", $layout = false )
+    public static function http( $error = false )
     {
         switch( $error )
         {
             case '404':
-                header("HTTP/1.0 404 Not Found");
+                echo (new Format())->import_component([
+                    'component' => 'PlatformErrors',
+                    'controller' => 'Errors',
+                    'method' => 'not_found',
+                ]);
+                break;
+            case '401':
+            case '403':
+            case '405':
+            case '406':
+            case '408':
+            case '409':
+            case '415':
+            case '500':
+            case '501':
+            case '502':
+            case '503':
+            case '504':
+            case '505':
+                http_response_code($error);
                 break;
 
             default:
