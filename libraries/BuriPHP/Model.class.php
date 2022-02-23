@@ -53,6 +53,9 @@ trait Model
 		$this->security  = new Security;
 		$this->format  	 = new Format;
 		$this->_lang = Session::get_value('_lang');
+
+		if ( method_exists($this, '___construct') )
+            $this->___construct();
 	}
 
 }

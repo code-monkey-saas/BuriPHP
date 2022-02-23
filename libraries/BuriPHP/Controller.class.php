@@ -75,5 +75,8 @@ trait Controller
 
         $class_model = str_replace('Controllers', 'Models', get_class($this));
         $this->model = new $class_model();
+
+        if ( method_exists($this, '___construct') )
+            $this->___construct();
     }
 }
