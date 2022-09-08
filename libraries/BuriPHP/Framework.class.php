@@ -28,7 +28,7 @@ class Framework
 	*
 	* @var const
 	*/
-	const RELEASE = '1.0.1';
+	const RELEASE = '1.0.0';
 
 	/**
 	* Estado del framework.

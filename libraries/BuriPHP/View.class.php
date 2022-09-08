@@ -1,4 +1,6 @@
-<?php namespace BuriPHP\System\Libraries;
+<?php
+
+namespace BuriPHP\System\Libraries;
 
 /**
  *
@@ -16,29 +18,15 @@ defined('_EXEC') or die;
 
 class View
 {
-	/**
-	*
-	* @var object
-	*/
-	private $dependencies;
+	public $dependencies;
+	public $security;
+	public $format;
 
 	/**
-	*
-	* @var object
-	*/
-	private $security;
-
-	/**
-	*
-	* @var object
-	*/
-	private $format;
-
-	/**
-	* Constructor.
-	*
-	* @return  void
-	*/
+	 * Constructor.
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		$this->dependencies = new Dependencies();
@@ -47,54 +35,59 @@ class View
 	}
 
 	/**
-	* Renderiza el html
-	*
-	* @param	object    $controller    Controlador principal.
-	* @param	mixed     $layouts		 Informacion de los layouts a mostrar.
-	*
-	* @return  string
-	*/
-	public function render( $body = null, $head = null, $footer = null )
+	 * Renderiza el html
+	 *
+	 * @param	object    $controller    Controlador principal.
+	 * @param	mixed     $layouts		 Informacion de los layouts a mostrar.
+	 *
+	 * @return  string
+	 */
+	public function render($body = null, $base = null): bool | string
 	{
-		foreach ( $GLOBALS as $key => $value )
-		{
-			if ( $key != 'GLOBALS' ||
-			$key != '_SERVER' ||
-			$key != '_GET' ||
-			$key != '_POST' ||
-			$key != '_FILES' ||
-			$key != '_COOKIE' ||
-			$key != '_SESSION' ||
-			$key != '_REQUEST' ||
-			$key != '_ENV' )
-			{
+		foreach ($GLOBALS as $key => $value) {
+			if (
+				$key != 'GLOBALS' ||
+				$key != '_SERVER' ||
+				$key != '_GET' ||
+				$key != '_POST' ||
+				$key != '_FILES' ||
+				$key != '_COOKIE' ||
+				$key != '_SESSION' ||
+				$key != '_REQUEST' ||
+				$key != '_ENV'
+			) {
 				global ${$key};
 			}
 		}
 
-		if ( is_null($body) )
+		if (is_null($body))
 			return false;
 
+		// Get file body
+		ob_start();
+		require Security::DS($body);
+		$renderBody = ob_get_contents();
+		ob_end_clean();
+
+		// Get file base html
 		ob_start();
 
-		if ( is_null($head) )
-			require Security::DS(( Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS ) . "/head.php");
-		if ( $head != false && !is_null($head) )
-			require Security::DS( $head );
+		if (is_null($base)) {
+			require Security::DS((Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS) . "/base.php");
+		}
 
-		if ( !is_null($body) )
-			require Security::DS( $body );
+		if ($base != false && !is_null($base)) {
+			require Security::DS($base);
+		}
 
-		if ( is_null($footer) )
-			require Security::DS(( Format::check_path_admin() ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS ) . "/footer.php");
-		if ( $footer != false && !is_null($footer) )
-			require Security::DS( $footer );
-
-		$buffer = ob_get_contents();
+		$renderBase = ob_get_contents();
 
 		ob_end_clean();
 
-		return $buffer;
+		if ($base === false) {
+			return $renderBody;
+		} else {
+			return str_replace('{{renderView}}', $renderBody, $renderBase);
+		}
 	}
-
 }

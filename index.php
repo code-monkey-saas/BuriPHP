@@ -1,4 +1,6 @@
-<?php namespace BuriPHP;
+<?php
+
+namespace BuriPHP;
 
 /**
  *
@@ -14,26 +16,22 @@
 
 define('_EXEC', 1);
 
-if ( version_compare(PHP_VERSION, '7.0', '<') )
+if (version_compare(PHP_VERSION, '7.0', '<'))
     die('Your host needs to use PHP 7.0 or higher to run this version of BuriPHP.');
 
-if ( !defined('_DEFINES') )
-{
+if (!defined('_DEFINES')) {
     define('PATH_ROOT', __DIR__);
     require_once PATH_ROOT . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'defines.php';
 }
 
-spl_autoload_register(function ( $namespace )
-{
+spl_autoload_register(function ($namespace) {
     $namespace = explode('\\', $namespace);
-    $library = end( $namespace ) . CLASS_PHP;
+    $library = end($namespace) . CLASS_PHP;
 
-    if ( file_exists(PATH_BURIPHP_LIBRARIES . $library) )
-    {
+    if (file_exists(PATH_BURIPHP_LIBRARIES . $library)) {
         require_once PATH_BURIPHP_LIBRARIES . $library;
     }
-    if ( file_exists(PATH_LIBRARIES . $library) )
-    {
+    if (file_exists(PATH_LIBRARIES . $library)) {
         require_once PATH_LIBRARIES . $library;
     }
 });

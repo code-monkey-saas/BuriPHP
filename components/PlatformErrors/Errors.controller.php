@@ -1,4 +1,6 @@
-<?php namespace BuriPHP\Components\PlatformErrors\Controllers;
+<?php
+
+namespace BuriPHP\Components\PlatformErrors\Controllers;
 
 defined('_EXEC') or die;
 
@@ -12,7 +14,7 @@ class Errors
 	{
 		header("HTTP/1.0 404 Not Found");
 
-		define('_title', 'Error 404 - Panel de Control - '. \BuriPHP\Configuration::$web_page);
-		echo $this->view->render(Component::LAYOUTS . 'not_found.php');
+		define('_title', 'Error 404 - ' . \BuriPHP\Configuration::$web_page);
+		echo $this->view->render(Component::LAYOUTS . 'not_found.php', null, false);
 	}
 }

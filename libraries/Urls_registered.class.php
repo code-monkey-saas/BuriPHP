@@ -1,4 +1,6 @@
-<?php namespace BuriPHP\Libraries;
+<?php
+
+namespace BuriPHP\Libraries;
 
 /**
  *
@@ -14,17 +16,23 @@
 
 defined('_EXEC') or die;
 
+use \BuriPHP\System\Libraries\{Component};
+
 class Urls_registered
 {
     static public $default = '/';
 
     static public function urls()
     {
-        return [
+        $urls = [
             '/' => [
-                'controller' => 'Index',
-                'method' => 'init'
+                'controller' => 'Pages',
+                'method' => 'index'
             ]
         ];
+
+        $urls = array_merge($urls, Component::urls('PlatformAccess'));
+
+        return $urls;
     }
 }

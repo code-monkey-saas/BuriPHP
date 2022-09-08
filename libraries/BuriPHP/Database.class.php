@@ -1,4 +1,6 @@
-<?php namespace BuriPHP\System\Libraries;
+<?php
+
+namespace BuriPHP\System\Libraries;
 
 /**
  *
@@ -18,20 +20,4 @@ use \Medoo\Medoo;
 
 class Database extends Medoo
 {
-	public function init( $options = [] ): array
-	{
-		return [
-			// [required]
-			'type' => \BuriPHP\Configuration::$db_type,
-			'host' => \BuriPHP\Configuration::$db_host,
-			'database' => \BuriPHP\Configuration::$db_name,
-			'username' => \BuriPHP\Configuration::$db_user,
-			'password' => \BuriPHP\Configuration::$db_pass,
-
-			// [optional]
-			'charset' => \BuriPHP\Configuration::$db_charset,
-			'port' => \BuriPHP\Configuration::$db_port,
-			'prefix' => \BuriPHP\Configuration::$db_prefix
-		];
-	}
 }
