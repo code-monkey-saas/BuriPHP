@@ -1,84 +1,41 @@
 <?php
 
-namespace BuriPHP\System\Libraries;
-
 /**
- *
  * @package BuriPHP.Libraries
  *
- * @since 1.0.0
- * @version 1.1.0
+ * @since 1.0
+ * @version 2.0
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
  * @copyright Copyright (C) CodeMonkey - Platform. All Rights Reserved.
  */
 
-defined('_EXEC') or die;
+namespace Libraries\BuriPHP;
 
-trait Controller
+use Libraries\BuriPHP\Helpers\HelperArray;
+use Libraries\BuriPHP\Helpers\HelperFile;
+use Libraries\BuriPHP\Interfaces\iController;
+
+class Controller implements iController
 {
-    /**
-     *
-     * @var object
-     */
+    public $service;
     public $view;
 
     /**
-     *
-     * @var object
+     * Busca si existe el service del controller.
+     * Si existe, lo inicializa.
      */
-    public $security;
-
-    /**
-     *
-     * @var object
-     */
-    public $format;
-
-    /**
-     *
-     * @var object
-     */
-    public $session;
-
-    /**
-     *
-     * @var object
-     */
-    public $system;
-
-    /**
-     *
-     * @var object
-     */
-    public $model;
-
-    /**
-     * Guarda el lenguaje establecido.
-     *
-     * @var string
-     */
-    public $_lang;
-
-    /**
-     * Constructor.
-     *
-     * @return  void
-     */
-
-    public function __construct()
+    final public function __construct()
     {
+        $controller = explode('\\', get_called_class());
+        $controller = HelperArray::getLast($controller);
+
+        if (HelperFile::exists(PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $controller . SERVICE_PHP)) {
+            $service = '\Services\\' . $controller;
+            $this->service = new $service();
+        }
+
         $this->view = new View();
-        $this->security = new Security();
-        $this->format = new Format();
-        $this->session = new Session();
-        $this->_lang = Session::get_value('_lang');
-
-        $class_model = str_replace('Controllers', 'Models', get_class($this));
-        $this->model = new $class_model();
-
-        if (method_exists($this, '___construct'))
-            $this->___construct();
     }
 }

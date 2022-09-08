@@ -1,84 +1,129 @@
 <?php
 
-namespace BuriPHP\System\Libraries;
-
 /**
- *
  * @package BuriPHP.Libraries
  *
- * @since 1.0.0
- * @version 1.1.0
+ * @since 1.0
+ * @version 2.0
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
  * @copyright Copyright (C) CodeMonkey - Platform. All Rights Reserved.
+ * 
+ * @deprecated
  */
+
+namespace Libraries\BuriPHP;
+
+use Libraries\BuriPHP\Helpers\HelperDate;
 
 class Dates
 {
-    public function __construct()
-    {
-        date_default_timezone_set(\BuriPHP\Configuration::$time_zone);
-    }
-
+    /**
+     * Formato de fecha: yyyy-mm-dd
+     * 
+     * @param date $date
+     * @param mixed $get
+     * 
+     * @deprecated
+     * @see HelperDate::getDate()
+     * 
+     * @return string
+     */
     static public function formatted_date($date = null, $get = null)
     {
-        if (is_null($date))
-            $date = date('Y-m-d');
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-        $day_number = date('d', strtotime($date));
-        $year = date('Y', strtotime($date));
+        if (is_null($date))
+            $date = HelperDate::getToday();
 
         switch ($get) {
             case 'formatted':
-                return self::get_day_week($date) . " " . $day_number . " de " . self::get_month($date, true) . " del " . $year;
+                return HelperDate::getDate($date);
                 break;
 
             default:
-                return $day_number . "/" . self::get_month($date, true) . "/" . $year;
+                return HelperDate::getDate($date, true);
                 break;
         }
     }
 
+    /**
+     * Formato de fecha: yyyy-mm-dd
+     * 
+     * @param date $date
+     * 
+     * @deprecated
+     * @see HelperDate::getDayName()
+     * 
+     * @return string
+     */
     static public function get_day_week($date = null)
     {
-        date_default_timezone_set(\BuriPHP\Configuration::$time_zone);
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-        if (!is_null($date)) {
-            $days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+        if (is_null($date))
+            $date = HelperDate::getToday();
 
-            return $days[date('N', strtotime($date)) - 1];
-        } else
-            return null;
+        return HelperDate::getDayName($date);
     }
 
+    /**
+     * Formato de fecha: yyyy-mm-dd
+     * 
+     * @param date $date
+     * @param mixed $month_complete
+     * 
+     * @deprecated
+     * @see HelperDate::getMonthName()
+     * 
+     * @return string
+     */
     static public function get_month($date = null, $month_complete = false)
     {
-        date_default_timezone_set(\BuriPHP\Configuration::$time_zone);
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-        if (!is_null($date)) {
-            if ($month_complete == false)
-                $months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-            else
-                $months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        if (is_null($date))
+            $date = HelperDate::getToday();
 
-            return $months[date('m', strtotime($date)) - 1];
-        } else
-            return null;
+        if ($month_complete == false)
+            return HelperDate::getMonthName(HelperDate::getOnlyMonth($date), true);
+        else
+            return HelperDate::getMonthName(HelperDate::getOnlyMonth($date));
     }
 
+    /**
+     * @deprecated
+     * @see HelperDate::getDaysCurrentMonth()
+     */
     static public function get_current_month()
     {
-        return [date('Y-m-d', strtotime('first day of this month')), date('Y-m-d', strtotime('last day of this month'))];
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
+        return HelperDate::getDaysCurrentMonth();
     }
 
+    /**
+     * @deprecated
+     * @see HelperDate::getFirstDayOfMonth
+     * @see HelperDate::getLastDayOfMonth
+     */
     static public function get_last_month()
     {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return [date('Y-m-d', strtotime('first day of last month')), date('Y-m-d', strtotime('last day of last month'))];
     }
 
+    /**
+     * @deprecated
+     * @see HelperDate::getFirstDayOfMonth
+     * @see HelperDate::getLastDayOfMonth
+     */
     static public function get_specific_month($date)
     {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         $date = date("Y-m-01", strtotime(date("d-m-Y") . $date));
 
         return [date('Y-m-01', strtotime($date)), date('Y-m-t', strtotime($date))];

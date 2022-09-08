@@ -1,56 +1,39 @@
 <?php
 
-namespace BuriPHP\System\Libraries;
-
 /**
- *
  * @package BuriPHP.Libraries
  *
- * @since 1.0.0
- * @version 1.1.0
+ * @since 1.0
+ * @version 2.0
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
  * @copyright Copyright (C) CodeMonkey - Platform. All Rights Reserved.
+ * 
+ * @deprecated
  */
 
-defined('_EXEC') or die;
+namespace Libraries\BuriPHP;
+
+use Libraries\BuriPHP\Helpers\HelperDateTime;
+use Libraries\BuriPHP\Helpers\HelperServer;
+use Libraries\BuriPHP\Helpers\HelperValidate;
 
 class Format
 {
 	/**
-	 *
-	 * @var object
-	 */
-	private $security;
-
-	/**
-	 *
-	 * @var object
-	 */
-	private $dependencies;
-
-	/**
-	 * Constructor.
-	 *
-	 * @return  void
-	 */
-	public function __construct()
-	{
-		$this->security = new Security();
-		$this->dependencies = new Dependencies();
-	}
-
-	/**
 	 * Establece la zona horaria.
 	 *
 	 * @static
-	 *
-	 * @return  void
+	 * 
+	 * @deprecated
+	 * @see HelperDateTime::setLocateTimeZone()
 	 */
 	public static function set_time_zone()
 	{
-		date_default_timezone_set(\BuriPHP\Configuration::$time_zone);
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
+		HelperDateTime::setLocateTimeZone();
 	}
 
 	/**
@@ -58,63 +41,73 @@ class Format
 	 *
 	 * @static
 	 *
-	 * @return  string
+	 * @deprecated
+	 * @see HelperDateTime::getNow()
 	 */
 	public static function get_date_hour()
 	{
-		self::set_time_zone();
-		return date('Y-m-d H:i:s', time());
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
+		return HelperDateTime::getNow();
 	}
 
 	/**
 	 * Verifica si el path es del administrador.
 	 *
 	 * @static
+	 * 
+	 * @deprecated
 	 *
-	 * @return  boolean
+	 * @return boolean
 	 */
 	public static function check_path_admin()
 	{
-		$cwd = Security::DS(getcwd());
-		$path_administrator = Security::DS(PATH_ADMINISTRATOR);
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-		return ($cwd == $path_administrator) ? true : false;
+		return false;
 	}
 
 	/**
 	 * Obtiene la base de la URL.
-	 *
-	 * @return  string
+	 * 
+	 * @deprecated
+	 * @see HelperServer::getDomainHttp()
+	 * 
+	 * @return string
 	 */
 	public function baseurl()
 	{
-		$uri = $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
-		$uri = str_replace(['index.php', ADMINISTRATOR . '/'], '', $uri);
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-		return Security::protocol() . $uri;
+		return HelperServer::getDomainHttp();
 	}
 
 	/**
 	 * Verifica si existe una peticion AJAX.
 	 *
-	 * @return  boolean
+	 * @deprecated
+	 * @see HelperServer::getDomainHttp()
+	 * 
+	 * @return boolean
 	 */
 	public static function exist_ajax_request()
 	{
-		if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-			header('Content-type: application/json');
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-			return true;
-		} else return false;
+		HelperValidate::ajaxRequest();
 	}
 
 	/**
 	 * No permitir peticiones por AJAX.
 	 *
-	 * @return  void
+	 * @deprecated
+	 * 
+	 * @return void
 	 */
 	public static function no_ajax()
 	{
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
 		if (self::exist_ajax_request()) die();
 	}
 
@@ -123,32 +116,36 @@ class Format
 	 *
 	 * @static
 	 *
-	 * @param	array    $arr    Arreglo a remplazar las llaves por los valores.
-	 * @param	string   $string Cadena donde se remplazara.
+	 * @param array $arr
+	 * @param string $string
+	 * 
+	 * @deprecated
 	 *
-	 * @return  string
+	 * @return string
 	 */
 	public static function replace($arr, $string)
 	{
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
 		return str_replace(array_keys($arr), array_values($arr), $string);
 	}
 
 	/**
 	 * Remplaza la llamada de un fichero, por el fichero.
 	 *
-	 * @param	string    $buffer    Buffer pre-cargado.
-	 * @param	string	  $name_file Nombre del fichero solicitado.
-	 * @param	string	  $path		 Ruta del fichero.
+	 * @param string $buffer
+	 * @param string $name_file
+	 * @param string $path
+	 * 
+	 * @deprecated
 	 *
-	 * @return  mixed
+	 * @return mixed
 	 */
-	public function include_file($buffer = false, $name_file = false, $path = false)
+	public function include_file($buffer, $name_file, $path)
 	{
-		if ($buffer == false || $name_file == false) return null;
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-		if ($path == false) $path = (self::check_path_admin()) ? PATH_ADMINISTRATOR_LAYOUTS : PATH_LAYOUTS;
-
-		$route = Security::DS("{$path}{$name_file}.php");
+		$route = "$path/$name_file.php";
 
 		if (file_exists($route)) {
 			ob_start();
@@ -168,48 +165,55 @@ class Format
 	/**
 	 * Obtiene un fichero.
 	 *
-	 * @param	string    $file    Fichero
+	 * @param string $file
+	 * 
+	 * @deprecated
 	 *
-	 * @return  mixed
+	 * @return mixed
 	 */
-	public function get_file($file = false, $arr = null)
+	public function get_file($file, $arr = null)
 	{
-		if ($file == false) return null;
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-		$file = Security::DS($file);
-
-		if (file_exists($file)) {
-			if (!is_null($arr)) {
-				foreach ($arr as $key => $value) global ${$key};
-			}
-
-			ob_start();
-
-			require $file;
-
-			$buffer = ob_get_contents();
-
-			ob_end_clean();
-
-			return $buffer;
+		if (!file_exists($file)) {
+			return false;
 		}
+
+		if (!is_null($arr)) {
+			foreach ($arr as $key => $value) global ${$key};
+		}
+
+		ob_start();
+
+		require $file;
+
+		$buffer = ob_get_contents();
+
+		ob_end_clean();
+
+		return $buffer;
 	}
 
 	/**
-	 * Obtiene un fichero.
+	 * Importa un fichero.
 	 *
-	 * @param	string    $path       Directorio del fichero.
-	 * @param	string	  $file_name  Nombre del fichero.
-	 * @param	string	  $file_type  Tipo de fichero.
+	 * @param string $path
+	 * @param string $file_name
+	 * @param string $file_type
+	 * 
+	 * @deprecated
+	 * @see HelperFile::getAllContent()
 	 *
-	 * @return  mixed
+	 * @return mixed
 	 */
 	public function import_file($path, $file_name, $file_type)
 	{
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
 		$supported_file_type = ['ini', 'php', 'html', 'json'];
 
 		if (in_array($file_type, $supported_file_type)) {
-			$file = Security::DS("{$path}/{$file_name}.{$file_type}");
+			$file = "{$path}/{$file_name}.{$file_type}";
 
 			if (file_exists($file)) {
 				switch ($file_type) {
@@ -233,24 +237,19 @@ class Format
 		}
 	}
 
+	/**
+	 * Importa un componente.
+	 *
+	 * @param array $argv
+	 * 
+	 * @deprecated
+	 *
+	 * @return bool
+	 */
 	public function import_component($argv = [])
 	{
-		if (!isset($argv['component']) || !isset($argv['controller']) || !isset($argv['method']))
-			return false;
+		trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
-		if (!isset($argv['params']))
-			$argv['params'] = [];
-
-		$layout = (self::check_path_admin()) ? '\BuriPHP\Administrator\System\Libraries\Layout' : '\BuriPHP\System\Libraries\Layout';
-
-		$component = new $layout();
-		$component->set_settings_page($argv);
-
-		ob_start();
-		$component->load_core();
-		$buffer = ob_get_contents();
-		ob_end_clean();
-
-		return $buffer;
+		return false;
 	}
 }

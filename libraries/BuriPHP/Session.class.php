@@ -1,20 +1,21 @@
 <?php
 
-namespace BuriPHP\System\Libraries;
-
 /**
- *
  * @package BuriPHP.Libraries
  *
- * @since 1.0.0
- * @version 1.1.0
+ * @since 1.0
+ * @version 2.0
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
  * @copyright Copyright (C) CodeMonkey - Platform. All Rights Reserved.
+ * 
+ * @deprecated
  */
 
-defined('_EXEC') or die;
+namespace Libraries\BuriPHP;
+
+use Libraries\BuriPHP\Helpers\HelperSession;
 
 class Session
 {
@@ -23,11 +24,13 @@ class Session
 	 *
 	 * @static
 	 *
-	 * @param	string    $str    Nombre de la sesion.
+	 * @param string $str
+	 * 
+	 * @deprecated
 	 *
-	 * @return  void
+	 * @return void
 	 */
-	static function name($str = 'BuriPHP'): void
+	static function name($str = 'BuriPHP')
 	{
 		if (empty(ini_get('session.name')))
 			session_name($str);
@@ -37,28 +40,30 @@ class Session
 	 * Inicia la sesion.
 	 *
 	 * @static
+	 * 
+	 * @deprecated
+	 * @see HelperSession::init()
 	 *
-	 * @param	array    $array    Parametros de sesion.
-	 *
-	 * @return  void
+	 * @return void
 	 */
-	static function init($array = false): void
+	static function init()
 	{
-		if ($array == false) $array = ['cookie_lifetime' => \BuriPHP\Configuration::$cookie_lifetime];
-
-		@session_start($array);
+		HelperSession::init();
 	}
 
 	/**
 	 * Destruye la sesion.
 	 *
 	 * @static
+	 * 
+	 * @deprecated
+	 * @see HelperSession::destroy()
 	 *
 	 * @return  void
 	 */
-	static function destroy(): void
+	static function destroy()
 	{
-		@session_destroy();
+		HelperSession::destroy();
 	}
 
 	/**
@@ -66,13 +71,16 @@ class Session
 	 *
 	 * @static
 	 *
-	 * @param	string    $str    Nombre de la variable.
+	 * @param string $str
+	 * 
+	 * @deprecated
+	 * @see HelperSession::getValue()
 	 *
-	 * @return  void
+	 * @return void
 	 */
-	static function get_value($str): string | array
+	static function get_value($str)
 	{
-		return !empty($_SESSION[$str]) ? $_SESSION[$str] : [];
+		return HelperSession::getValue($str);
 	}
 
 	/**
@@ -80,14 +88,17 @@ class Session
 	 *
 	 * @static
 	 *
-	 * @param	string    $str    Nombre de la variable.
-	 * @param	string    $value  Valor de la variable.
+	 * @param string $str
+	 * @param string $value
+	 * 
+	 * @deprecated
+	 * @see HelperSession::setValue()
 	 *
 	 * @return  void
 	 */
-	static function set_value($str, $value): void
+	static function set_value($str, $value)
 	{
-		$_SESSION[$str] = $value;
+		HelperSession::setValue($str, $value);
 	}
 
 	/**
@@ -95,13 +106,16 @@ class Session
 	 *
 	 * @static
 	 *
-	 * @param	string    $str    Nombre de la variable.
+	 * @param string $str
+	 * 
+	 * @deprecated
+	 * @see HelperSession::removeValue()
 	 *
-	 * @return  void
+	 * @return void
 	 */
 	static function unset_value($str): void
 	{
-		if (isset($_SESSION[$str])) unset($_SESSION[$str]);
+		HelperSession::removeValue($str);
 	}
 
 	/**
@@ -109,25 +123,31 @@ class Session
 	 *
 	 * @static
 	 *
-	 * @param	string    $str    Nombre de la variable.
+	 * @param string $str
+	 * 
+	 * @deprecated
+	 * @see HelperSession::existsValue()
 	 *
-	 * @return  void
+	 * @return void
 	 */
-	static function exists_var($str): bool
+	static function exists_var($str)
 	{
-		return (isset($_SESSION[$str]) && !empty($_SESSION[$str])) ? true : false;
+		return HelperSession::existsValue($str);
 	}
 
 	/**
 	 * Verifica si existe una sesion.
 	 *
 	 * @static
+	 * 
+	 * @deprecated
+	 * @see HelperSession::isActive()
 	 *
-	 * @return  void
+	 * @return void
 	 */
-	static function exists(): bool
+	static function exists()
 	{
-		return (sizeof($_SESSION) > 0) ? true : false;
+		return HelperSession::isActive();
 	}
 
 	/**
@@ -135,11 +155,13 @@ class Session
 	 *
 	 * @static
 	 *
-	 * @param	array    $arr    Contenido de las variables.
+	 * @param array $arr
+	 * 
+	 * @deprecated
 	 *
-	 * @return  boolean
+	 * @return boolean
 	 */
-	static function create_session_login($arr = []): bool
+	static function create_session_login($arr = [])
 	{
 		self::set_value('__token', $arr['token']);
 		self::set_value('__id_user', $arr['id_user']);
