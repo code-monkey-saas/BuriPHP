@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 2.0Alpha
- * @version 1.1
+ * @version 1.2
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -131,9 +131,9 @@ class Router implements iRouter
      * 
      * @return mixed
      */
-    final public function get($str, $method, $contentType = 'html')
+    final public function get($str, $method, array $settings = [])
     {
-        $this->join($this->currentEndpoint . $str, 'GET', $method, $contentType);
+        $this->join($this->currentEndpoint . $str, 'GET', $method, $settings);
 
         return $this;
     }
@@ -147,9 +147,9 @@ class Router implements iRouter
      * 
      * @return mixed
      */
-    final public function post($str, $method, $contentType = 'json')
+    final public function post($str, $method, array $settings = [])
     {
-        $this->join($this->currentEndpoint . $str, 'POST', $method, $contentType);
+        $this->join($this->currentEndpoint . $str, 'POST', $method, $settings);
 
         return $this;
     }
@@ -163,9 +163,9 @@ class Router implements iRouter
      * 
      * @return mixed
      */
-    final public function put($str, $method, $contentType = 'json')
+    final public function put($str, $method, array $settings = [])
     {
-        $this->join($this->currentEndpoint . $str, 'PUT', $method, $contentType);
+        $this->join($this->currentEndpoint . $str, 'PUT', $method, $settings);
 
         return $this;
     }
@@ -179,9 +179,9 @@ class Router implements iRouter
      * 
      * @return mixed
      */
-    final public function update($str, $method, $contentType = 'json')
+    final public function update($str, $method, array $settings = [])
     {
-        $this->join($this->currentEndpoint . $str, 'UPDATE', $method, $contentType);
+        $this->join($this->currentEndpoint . $str, 'UPDATE', $method, $settings);
 
         return $this;
     }
@@ -195,9 +195,9 @@ class Router implements iRouter
      * 
      * @return mixed
      */
-    final public function delete($str, $method, $contentType = 'json')
+    final public function delete($str, $method, array $settings = [])
     {
-        $this->join($this->currentEndpoint . $str, 'DELETE', $method, $contentType);
+        $this->join($this->currentEndpoint . $str, 'DELETE', $method, $settings);
 
         return $this;
     }
@@ -210,7 +210,7 @@ class Router implements iRouter
      * @param string $method
      * @param string $contentType
      */
-    private function join($url, $requestMethod, $method, $contentType)
+    private function join($url, $requestMethod, $method, $settings)
     {
         $url = explode('/', $url);
         $url = HelperArray::compact($url);
@@ -236,9 +236,21 @@ class Router implements iRouter
         $arrParams = json_encode($arrParams);
         $url = HelperArray::joinValues($url, '/');
 
+        $ContentType = HelperArray::getValueByKey($settings, 'ContentType');
+
+        if (!HelperValidate::isEmpty($ContentType)) {
+            $settings = HelperArray::removeKey($settings, 'ContentType');
+        }
+
+        $settingsImplode = "";
+
+        foreach ($settings as $key => $value) {
+            $settingsImplode .= $key . '=' . $value . ',';
+        }
+
         $this->urls = HelperArray::append(
             $this->urls,
-            "$requestMethod:/$url:$this->useModule:$this->useController:$method:$arrParams:$contentType:[]"
+            "$requestMethod:/$url:$this->useModule:$this->useController:$method:$arrParams:$ContentType:$settingsImplode"
         );
     }
 
@@ -295,6 +307,15 @@ class Router implements iRouter
             $params[$value[1]] = $currentUri[$value[0]];
         }
 
+        $settings = HelperArray::compact(explode(',', $endpoint[7]));
+        $settingsArr = [];
+
+        foreach ($settings as $value) {
+            $arr = explode('=', $value);
+
+            $settingsArr[$arr[0]] = $arr[1];
+        }
+
         return [
             'REQUEST_METHOD' => $endpoint[0],
             'REQUEST_URI' => $endpoint[1],
@@ -303,7 +324,7 @@ class Router implements iRouter
             'METHOD' => $endpoint[4],
             'PARAMS' => $params,
             'CONTENT_TYPE' => $endpoint[6],
-            'SETTINGS' => $endpoint[7]
+            'SETTINGS' => $settingsArr
         ];
     }
 
