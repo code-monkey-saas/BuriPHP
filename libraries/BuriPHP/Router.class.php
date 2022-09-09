@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 2.0Alpha
- * @version 1.0
+ * @version 1.1
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -17,6 +17,7 @@ use Libraries\BuriPHP\Interfaces\iRouter;
 use Libraries\BuriPHP\Helpers\HelperArray;
 use Libraries\BuriPHP\Helpers\HelperConvert;
 use Libraries\BuriPHP\Helpers\HelperFile;
+use Libraries\BuriPHP\Helpers\HelperServer;
 use Libraries\BuriPHP\Helpers\HelperString;
 use Libraries\BuriPHP\Helpers\HelperValidate;
 
@@ -287,13 +288,20 @@ class Router implements iRouter
 
         $endpoint = explode(':', $endpoint);
 
+        $params = [];
+        $currentUri = HelperServer::getCurrentPathInfo();
+
+        foreach (json_decode($endpoint[5]) as $value) {
+            $params[$value[1]] = $currentUri[$value[0]];
+        }
+
         return [
             'REQUEST_METHOD' => $endpoint[0],
             'REQUEST_URI' => $endpoint[1],
             'MODULE' => $endpoint[2],
             'CONTROLLER' => $endpoint[3],
             'METHOD' => $endpoint[4],
-            'PARAMS' => json_decode($endpoint[5], true),
+            'PARAMS' => $params,
             'CONTENT_TYPE' => $endpoint[6],
             'SETTINGS' => $endpoint[7]
         ];

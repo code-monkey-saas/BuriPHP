@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 1.0
- * @version 2.1
+ * @version 2.2
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -39,5 +39,10 @@ class Controller implements iController
         }
 
         $this->view = new View();
+    }
+
+    final protected function getParams()
+    {
+        return Router::getEndpoint()[1]['PARAMS'];
     }
 }
