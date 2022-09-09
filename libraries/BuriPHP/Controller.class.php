@@ -41,6 +41,9 @@ class Controller implements iController
         $this->view = new View();
     }
 
+    /**
+     * Obtiene los parametros enviados en la url.
+     */
     final protected function getParams()
     {
         return Router::getEndpoint()[1]['PARAMS'];
