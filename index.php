@@ -39,18 +39,6 @@ spl_autoload_register(function ($str) {
                 require_once PATH_BURIPHP_LIBRARIES . $resource . CLASS_PHP;
             }
         }
-    } else if (isset($arr[0]) && $arr[0] == 'Controllers') { // Incluimos los controladores
-        if (file_exists(PATH_MODULES . $arr[1] . DS . $arr[1] . CONTROLLER_PHP)) {
-            require_once PATH_MODULES . $arr[1] . DS . $arr[1] . CONTROLLER_PHP;
-        }
-    } else if (isset($arr[0]) && $arr[0] == 'Services') { // Incluimos los servicios
-        if (file_exists(PATH_MODULES . $arr[1] . DS . $arr[1] . SERVICE_PHP)) {
-            require_once PATH_MODULES . $arr[1] . DS . $arr[1] . SERVICE_PHP;
-        }
-    } else if (isset($arr[0]) && $arr[0] == 'Repositories') { // Incluimos los repositorios
-        if (file_exists(PATH_MODULES . $arr[1] . DS . $arr[1] . REPOSITORY_PHP)) {
-            require_once PATH_MODULES . $arr[1] . DS . $arr[1] . REPOSITORY_PHP;
-        }
     } else {
         if (file_exists(PATH_LIBRARIES . $resource . CLASS_PHP)) { // Librerias externas
             require_once PATH_LIBRARIES . $resource . CLASS_PHP;

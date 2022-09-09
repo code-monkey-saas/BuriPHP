@@ -32,6 +32,8 @@ class Controller implements iController
         $controller = HelperArray::getLast($controller);
 
         if (HelperFile::exists(PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $controller . SERVICE_PHP)) {
+            require_once PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $controller . SERVICE_PHP;
+
             $service = '\Services\\' . $controller;
             $this->service = new $service();
         }

@@ -134,6 +134,8 @@ final class Application
                 HelperHeader::setStatusCode(500);
                 HelperLog::saveError($exceptionMsg);
                 throw new \Exception($exceptionMsg);
+            } else {
+                require_once PATH_MODULES . $trace['MODULE'] . DS . $trace['CONTROLLER'] . CONTROLLER_PHP;
             }
 
             /**

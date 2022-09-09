@@ -31,6 +31,8 @@ class Service implements iService
         $service = HelperArray::getLast($service);
 
         if (HelperFile::exists(PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $service . REPOSITORY_PHP)) {
+            require_once PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $service . REPOSITORY_PHP;
+
             $repository = '\Repositories\\' . $service;
             $this->repository = new $repository();
         }
