@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 2.0Alpha
- * @version 1.2
+ * @version 1.3
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -162,7 +162,9 @@ final class Application
                 if (class_exists('\\Libraries\Build\Build')) {
                     $build = new \Libraries\Build\Build();
 
-                    $build->startup();
+                    if (method_exists($build, 'startup')) {
+                        $build->startup();
+                    }
                 }
 
                 $controller = new $namespace();
@@ -181,7 +183,7 @@ final class Application
             } else {
                 $app = $controller->{$trace['METHOD']}();
 
-                if (class_exists('\\Libraries\Build\Build')) {
+                if (class_exists('\\Libraries\Build\Build') && method_exists($build, 'wakeup')) {
                     $build->wakeup();
                 }
 
