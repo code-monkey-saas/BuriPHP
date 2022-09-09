@@ -7,7 +7,7 @@ namespace BuriPHP;
  * @package BuriPHP
  *
  * @since 1.0
- * @version 2.0
+ * @version 2.1
  * @license    You can see LICENSE.txt
  *
  * @author     David Miguel Gómez Macías < davidgomezmacias@gmail.com >
