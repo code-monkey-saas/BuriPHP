@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 2.0Alpha
- * @version 1.2
+ * @version 1.3
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -248,6 +248,10 @@ class Router implements iRouter
             $settingsImplode .= $key . '=' . $value . ',';
         }
 
+        if (HelperValidate::isEmpty($settingsImplode)) {
+            $settingsImplode = "[]";
+        }
+
         $this->urls = HelperArray::append(
             $this->urls,
             "$requestMethod:/$url:$this->useModule:$this->useController:$method:$arrParams:$ContentType:$settingsImplode"
@@ -307,13 +311,16 @@ class Router implements iRouter
             $params[$value[1]] = $currentUri[$value[0]];
         }
 
-        $settings = HelperArray::compact(explode(',', $endpoint[7]));
         $settingsArr = [];
 
-        foreach ($settings as $value) {
-            $arr = explode('=', $value);
+        if (is_array($endpoint[7])) {
+            $settings = HelperArray::compact(explode(',', $endpoint[7]));
 
-            $settingsArr[$arr[0]] = $arr[1];
+            foreach ($settings as $value) {
+                $arr = explode('=', $value);
+
+                $settingsArr[$arr[0]] = $arr[1];
+            }
         }
 
         return [
