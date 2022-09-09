@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 2.0Alpha
- * @version 1.1
+ * @version 1.2
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -75,7 +75,13 @@ final class Application
                 HelperServer::getValue('REQUEST_METHOD')
             )
         ) {
+            HelperHeader::setContentType('json');
             HelperHeader::setStatusCode(405);
+
+            echo json_encode([
+                'status' => 405,
+                'message' => 'Method Not Allowed'
+            ], JSON_PRETTY_PRINT);
 
             return false;
         }
