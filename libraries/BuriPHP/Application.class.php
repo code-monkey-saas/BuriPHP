@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 2.0Alpha
- * @version 1.3
+ * @version 1.4
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
@@ -160,7 +160,7 @@ final class Application
                 HelperHeader::setContentType($trace['CONTENT_TYPE']);
 
                 if (class_exists('\\Libraries\Build\Build')) {
-                    $build = new \Libraries\Build\Build();
+                    $build = new \Libraries\Build\Build($trace);
 
                     if (method_exists($build, 'startup')) {
                         $build->startup();
