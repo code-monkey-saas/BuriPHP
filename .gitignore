@@ -1,3 +1,5 @@
 logs/
 *.code-workspace
 .DS_Store
+/assets/uploads/*
+!/assets/uploads/.gitkeep
