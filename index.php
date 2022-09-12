@@ -21,6 +21,10 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'defines.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'AppSettings.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Settings.php';
 
+if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php')) {
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+}
+
 spl_autoload_register(function ($str) {
     $arr = explode('\\', $str);
     $resource = end($arr);
