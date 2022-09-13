@@ -313,7 +313,7 @@ class Router implements iRouter
 
         $settingsArr = [];
 
-        if (is_array($endpoint[7])) {
+        if (is_array(explode(',', $endpoint[7]))) {
             $settings = HelperArray::compact(explode(',', $endpoint[7]));
 
             foreach ($settings as $value) {
