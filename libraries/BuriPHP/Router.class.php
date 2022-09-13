@@ -319,7 +319,9 @@ class Router implements iRouter
             foreach ($settings as $value) {
                 $arr = explode('=', $value);
 
-                $settingsArr[$arr[0]] = $arr[1];
+                if (isset($arr[0]) && isset($arr[1])) {
+                    $settingsArr[$arr[0]] = $arr[1];
+                }
             }
         }
 
