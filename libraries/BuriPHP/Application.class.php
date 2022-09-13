@@ -163,9 +163,7 @@ final class Application
                     $build = new \Libraries\Build\Build($trace);
 
                     if (method_exists($build, 'startup')) {
-                        $buildStartup = $build->startup();
-
-                        if (false == $buildStartup) {
+                        if (false === $build->startup()) {
                             return false;
                         }
                     }
