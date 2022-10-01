@@ -48,4 +48,45 @@ class Controller implements iController
     {
         return Router::getEndpoint()[1]['PARAMS'];
     }
+
+    /**
+     * Obtiene la data e imagenes enviada por post.
+     */
+    final public function getPost()
+    {
+        $request = [];
+
+        if (!empty($_POST)) {
+            // when using application/x-www-form-urlencoded or multipart/form-data as the HTTP Content-Type in the request
+            // NOTE: if this is the case and $_POST is empty, check the variables_order in php.ini! - it must contain the letter P
+            $request = array_merge($request, $_POST);
+        }
+
+        // when using application/json as the HTTP Content-Type in the request 
+        $post = json_decode(file_get_contents('php://input'), true);
+        if (json_last_error() == JSON_ERROR_NONE) {
+            $request = array_merge($request, $post);
+        }
+
+        if (isset($_FILES) && !empty($_FILES)) {
+            $request = array_merge($request, $_FILES);
+        }
+
+        return $request;
+    }
+
+    /**
+     * Obtiene la data enviada por get.
+     */
+    final public function getGet()
+    {
+        $request = [];
+
+        if (!empty($_GET)) {
+            // when using application/x-www-form-urlencoded or multipart/form-data as the HTTP Content-Type in the request
+            $request = array_merge($request, $_GET);
+        }
+
+        return $request;
+    }
 }
