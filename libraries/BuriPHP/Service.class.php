@@ -29,6 +29,10 @@ class Service implements iService
      */
     final public function __construct()
     {
+        if (method_exists($this, '__init')) {
+            call_user_func_array(array($this, '__init'), []);
+        }
+
         $service = explode('\\', get_called_class());
         $service = HelperArray::getLast($service);
 

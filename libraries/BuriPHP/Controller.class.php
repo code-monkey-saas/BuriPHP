@@ -28,6 +28,10 @@ class Controller implements iController
      */
     final public function __construct()
     {
+        if (method_exists($this, '__init')) {
+            call_user_func_array(array($this, '__init'), []);
+        }
+
         $controller = explode('\\', get_called_class());
         $controller = HelperArray::getLast($controller);
 

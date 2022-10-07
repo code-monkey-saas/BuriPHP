@@ -25,6 +25,10 @@ class Repository
      */
     final public function __construct()
     {
+        if (method_exists($this, '__init')) {
+            call_user_func_array(array($this, '__init'), []);
+        }
+
         if (Settings::$useDatabase) {
             $this->database = (new Database())->newInstance();
         }
