@@ -4,7 +4,7 @@
  * @package BuriPHP.Libraries
  *
  * @since 1.0
- * @version 2.2
+ * @version 2.3
  * @license You can see LICENSE.txt
  *
  * @author David Miguel Gómez Macías < davidgomezmacias@gmail.com >
