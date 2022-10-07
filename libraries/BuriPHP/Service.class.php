@@ -27,7 +27,7 @@ class Service implements iService
      * Busca si existe el repository del controller.
      * Si existe, lo inicializa.
      */
-    final public function __construct()
+    final public function __construct(...$args)
     {
         if (method_exists($this, '__init')) {
             call_user_func_array(array($this, '__init'), []);
@@ -36,8 +36,10 @@ class Service implements iService
         $service = explode('\\', get_called_class());
         $service = HelperArray::getLast($service);
 
-        if (HelperFile::exists(PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $service . REPOSITORY_PHP)) {
-            require_once PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $service . REPOSITORY_PHP;
+        $module = (isset($args['module']) && !empty($args['module'])) ? $args['module'] : Router::getEndpoint()[1]['MODULE'];
+
+        if (HelperFile::exists(PATH_MODULES . $module . DS . $service . REPOSITORY_PHP)) {
+            require_once PATH_MODULES . $module . DS . $service . REPOSITORY_PHP;
 
             $repository = '\Repositories\\' . $service;
             $this->repository = new $repository();
@@ -72,7 +74,7 @@ class Service implements iService
                 require PATH_MODULES . $module . DS . $service . SERVICE_PHP;
 
                 $service = '\Services\\' . $service;
-                return new $service();
+                return new $service(module: $module);
             }
         } catch (\Throwable $th) {
             throw $th;
