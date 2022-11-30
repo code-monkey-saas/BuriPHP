@@ -220,7 +220,7 @@ class View
      */
     private function includesDependencies($view)
     {
-        preg_match_all("/\{{2}asset\|[a-zA-Z\|\{\$\.\}\:\/]+}{2}/", $view, $includes, PREG_SET_ORDER);
+        preg_match_all("/\{{2}asset\|[a-zA-Z\|\{\$-=?\.\}\:\/]+}{2}/", $view, $includes, PREG_SET_ORDER);
 
         $dependencies = [
             'css' => [],
