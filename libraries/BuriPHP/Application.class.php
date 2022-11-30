@@ -255,4 +255,88 @@ final class Application
         $GLOBALS['_APP']['ENDPOINT'] = $endpoint;
         $GLOBALS['_APP']['ALLOWED_METHODS'] = $allowedMethods;
     }
+
+    /**
+     * Configura la instalación
+     */
+    public static function setSettings(...$args)
+    {
+        $path = PATH_ROOT . DS . 'Settings.php';
+
+        $file = HelperFile::openText($path, 'r+');
+        $content = HelperFile::readChars($file, HelperFile::getSizeBytes($path));
+        HelperFile::close($file);
+
+        $content = explode(PHP_EOL, $content);
+
+        if (isset($args['domain']) || !empty($args['domain'])) {
+            $content[(28 - 1)] = "\tpublic static \$domain = '" . $args['domain'] . "';";
+        } else {
+            $content[(28 - 1)] = "\tpublic static \$domain = '" . HelperServer::getDomain() . "';";
+        }
+
+        if (isset($args['lang']) || !empty($args['lang'])) {
+            $content[(38 - 1)] = "\tpublic static \$langDefault = '" . $args['lang'] . "';";
+        }
+
+        if (isset($args['timeZone']) || !empty($args['timeZone'])) {
+            $content[(47 - 1)] = "\tpublic static \$timeZone = '" . $args['timeZone'] . "';";
+        }
+
+        if (isset($args['locale']) || !empty($args['locale'])) {
+            $content[(56 - 1)] = "\tpublic static \$locale = '" . $args['locale'] . "';";
+        }
+
+        if (isset($args['errorReporting']) || !empty($args['errorReporting'])) {
+            $content[(66 - 1)] = "\tpublic static \$errorReporting = '" . $args['errorReporting'] . "';";
+        }
+
+        if (isset($args['secret']) || !empty($args['secret'])) {
+            $content[(75 - 1)] = "\tpublic static \$secret = '" . $args['secret'] . "';";
+        }
+
+        if (isset($args['useDatabase']) && $args['useDatabase'] === true) {
+            $content[(84 - 1)] = "\tpublic static \$useDatabase = true;";
+        }
+
+        if (isset($args['useDatabase']) && $args['useDatabase'] === false) {
+            $content[(84 - 1)] = "\tpublic static \$useDatabase = false;";
+        }
+
+        if (isset($args['dbType']) || !empty($args['dbType'])) {
+            $content[(94 - 1)] = "\tpublic static \$dbType = '" . $args['dbType'] . "';";
+        }
+
+        if (isset($args['dbHost']) || !empty($args['dbHost'])) {
+            $content[(103 - 1)] = "\tpublic static \$dbHost = '" . $args['dbHost'] . "';";
+        }
+
+        if (isset($args['dbName']) || !empty($args['dbName'])) {
+            $content[(112 - 1)] = "\tpublic static \$dbName = '" . $args['dbName'] . "';";
+        }
+
+        if (isset($args['dbUser']) || !empty($args['dbUser'])) {
+            $content[(121 - 1)] = "\tpublic static \$dbUser = '" . $args['dbUser'] . "';";
+        }
+
+        if (isset($args['dbPass']) || !empty($args['dbPass'])) {
+            $content[(130 - 1)] = "\tpublic static \$dbPass = '" . $args['dbPass'] . "';";
+        }
+
+        if (isset($args['dbCharset']) || !empty($args['dbCharset'])) {
+            $content[(139 - 1)] = "\tpublic static \$dbCharset = '" . $args['dbCharset'] . "';";
+        }
+
+        if (isset($args['dbPrefix']) || !empty($args['dbPrefix'])) {
+            $content[(148 - 1)] = "\tpublic static \$dbPrefix = '" . $args['dbPrefix'] . "';";
+        }
+
+        if (isset($args['dbPort']) || !empty($args['dbPort'])) {
+            $content[(157 - 1)] = "\tpublic static \$dbPort = " . $args['dbPort'] . ";";
+        }
+
+        $file = HelperFile::openText($path, 'w');
+        HelperFile::write($file, implode(PHP_EOL, $content));
+        HelperFile::close($file);
+    }
 }
