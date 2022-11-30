@@ -25,7 +25,7 @@ class Settings extends AppSettings
      *
      * @var string $domain
      */
-    public static $domain = 'codemonkey.com.mx';
+    public static $domain = '';
 
     /**
      * Idioma por default.
@@ -44,7 +44,7 @@ class Settings extends AppSettings
      *
      * @var string $timeZone
      */
-    public static $timeZone = 'America/Cancun';
+    public static $timeZone = 'America/Mexico_City';
 
     /**
      * Localidad.
@@ -72,7 +72,7 @@ class Settings extends AppSettings
      *
      * @var string $secret
      */
-    public static $secret = 'iFfvUyP-uL]JFdFBwTGS<1?5R';
+    public static $secret = '';
 
     /**
      * Estado de uso de la base de datos.
@@ -81,7 +81,7 @@ class Settings extends AppSettings
      *
      * @var boolean $useDatabase
      */
-    public static $useDatabase = true;
+    public static $useDatabase = false;
 
     /**
      * Tipo de base de datos.
@@ -91,7 +91,7 @@ class Settings extends AppSettings
      *
      * @var string $dbType
      */
-    public static $dbType = 'mysql';
+    public static $dbType = 'MariaDB';
 
     /**
      * Dominio o IP para el servidor de base de datos.
@@ -100,7 +100,7 @@ class Settings extends AppSettings
      *
      * @var string $dbHost
      */
-    public static $dbHost = 'mariadb';
+    public static $dbHost = '';
 
     /**
      * Nombre de la base de datos
@@ -109,7 +109,7 @@ class Settings extends AppSettings
      *
      * @var string $dbName
      */
-    public static $dbName = 'testing';
+    public static $dbName = '';
 
     /**
      * Usuario de la base de datos
@@ -118,7 +118,7 @@ class Settings extends AppSettings
      *
      * @var string $dbUser
      */
-    public static $dbUser = 'admin';
+    public static $dbUser = '';
 
     /**
      * Contraseña de la base de datos.
@@ -127,7 +127,7 @@ class Settings extends AppSettings
      *
      * @var string $dbPass
      */
-    public static $dbPass = 'root';
+    public static $dbPass = '';
 
     /**
      * Tipo de caracteres para la base de datos. Opcional.
