@@ -15,7 +15,7 @@ class Init extends Controller
             timeZone: 'America/Cancun',
             locale: 'es_MX.UTF-8',
             errorReporting: 'development',
-            secret: HelperString::randomString(64),
+            secret: HelperString::random(64),
             useDatabase: false,
             dbType: 'MariaDB',
             dbHost: 'localhost',

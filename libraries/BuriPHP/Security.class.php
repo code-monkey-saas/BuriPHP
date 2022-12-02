@@ -137,13 +137,13 @@ class Security
      * @param integer $length
      * 
      * @deprecated
-     * @see HelperString::randomString()
+     * @see HelperString::random()
      *
      * @return string
      */
     public function random_string($length = 8)
     {
-        return HelperString::randomString($length);
+        return HelperString::random($length);
     }
 
     /**

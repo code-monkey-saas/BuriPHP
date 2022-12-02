@@ -501,31 +501,13 @@ abstract class HelperString
     }
 
     /**
-     * Genera un número aleatorio de N digitos de longitud.
-     *
-     * @param int $numDigits
-     *
-     * @return string
-     */
-    public static function createRandom($numDigits = 6): string
-    {
-        $random = '';
-        for ($n = $numDigits; $n > 0; $n--) {
-            $generated = '' . mt_rand();
-            $position = mt_rand(1, strlen($generated) - 1);
-            $random   .= $generated[$position];
-        }
-        return strval($random);
-    }
-
-    /**
      * Genera un string de caracteres random.
      *
      * @param integer $length
      *
      * @return string
      */
-    public static function randomString($length = 8)
+    public static function random($length = 8)
     {
         $salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $base = strlen($salt);

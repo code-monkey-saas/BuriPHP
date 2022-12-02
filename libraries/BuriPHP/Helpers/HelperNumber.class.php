@@ -157,4 +157,22 @@ abstract class HelperNumber
     {
         return (string) preg_replace('/[^0-9]/', '', $number);
     }
+
+    /**
+     * Genera un número aleatorio de N digitos de longitud.
+     *
+     * @param int $numDigits
+     *
+     * @return string
+     */
+    public static function random($numDigits = 6): string
+    {
+        $random = '';
+        for ($n = $numDigits; $n > 0; $n--) {
+            $generated = '' . mt_rand();
+            $position = mt_rand(1, strlen($generated) - 1);
+            $random   .= $generated[$position];
+        }
+        return strval($random);
+    }
 }

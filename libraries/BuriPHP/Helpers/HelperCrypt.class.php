@@ -305,7 +305,7 @@ abstract class HelperCrypt
      */
     public static function createPassword($string)
     {
-        $salt = HelperString::randomString(64);
+        $salt = HelperString::random(64);
         $password = self::createHash('sha1', $string . $salt);
 
         return $password . ':' . $salt;
