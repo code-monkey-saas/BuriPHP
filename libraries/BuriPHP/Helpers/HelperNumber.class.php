@@ -145,4 +145,16 @@ abstract class HelperNumber
         $format = trim(str_replace('  ', ' ', $format));
         return $format;
     }
+
+    /**
+     * Devuelve un string unicamente con los números.
+     *
+     * @param        $number
+     *
+     * @return string
+     */
+    public static function getNumbers($number)
+    {
+        return (string) preg_replace('/[^0-9]/', '', $number);
+    }
 }
