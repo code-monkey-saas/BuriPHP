@@ -175,4 +175,17 @@ abstract class HelperNumber
         }
         return strval($random);
     }
+
+    /**
+     * Devuelve un numero aleatorio entre un mínimo y un máximo.
+     *
+     * @param $min
+     * @param $max
+     *
+     * @return int
+     */
+    public static function createRandomRange($min, $max): string
+    {
+        return '' . mt_rand($min, $max);
+    }
 }

@@ -488,19 +488,6 @@ abstract class HelperString
     }
 
     /**
-     * Devuelve un numero aleatorio entre un mínimo y un máximo.
-     *
-     * @param $min
-     * @param $max
-     *
-     * @return int
-     */
-    public static function createRandomRange($min, $max): string
-    {
-        return '' . mt_rand($min, $max);
-    }
-
-    /**
      * Genera un string de caracteres random.
      *
      * @param integer $length
