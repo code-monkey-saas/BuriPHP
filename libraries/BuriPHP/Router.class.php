@@ -171,7 +171,7 @@ class Router implements iRouter
     }
 
     /**
-     * Asigna usar el metodo UPDATE
+     * Asigna usar el metodo PATCH
      * 
      * @param string $str
      * @param string $method
@@ -179,9 +179,9 @@ class Router implements iRouter
      * 
      * @return mixed
      */
-    final public function update($str, $method, array $settings = [])
+    final public function patch($str, $method, array $settings = [])
     {
-        $this->join($this->currentEndpoint . $str, 'UPDATE', $method, $settings);
+        $this->join($this->currentEndpoint . $str, 'PATCH', $method, $settings);
 
         return $this;
     }
