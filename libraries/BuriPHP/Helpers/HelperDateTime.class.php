@@ -182,6 +182,6 @@ abstract class HelperDateTime
     {
         date_default_timezone_set(Settings::$timeZone);
         setlocale(LC_ALL, Settings::$locale);
-        setlocale(LC_TIME, null);
+        setlocale(LC_TIME, Settings::$locale);
     }
 }
