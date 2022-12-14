@@ -136,6 +136,23 @@ class View
                 HelperFile::getSanitizedPath(PATH_SHARED . HelperArray::joinValues($file, '/'));
 
             if (HelperFile::exists($file)) {
+                foreach ($GLOBALS as $key => $value) {
+                    if (
+                        $key != 'GLOBALS' ||
+                        $key != '_SERVER' ||
+                        $key != '_GET' ||
+                        $key != '_POST' ||
+                        $key != '_FILES' ||
+                        $key != '_COOKIE' ||
+                        $key != '_SESSION' ||
+                        $key != '_REQUEST' ||
+                        $key != '_ENV' ||
+                        $key != '_APP'
+                    ) {
+                        global ${$key};
+                    }
+                }
+
                 ob_start();
                 require $file;
                 $import = ob_get_contents();
