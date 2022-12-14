@@ -271,9 +271,14 @@ abstract class HelperDate
      *
      * @return int
      */
-    public static function getDate($date, $short = false)
+    public static function getDate($date = false, $short = false)
     {
-        $date = HelperDate::getToday();
+        if (false === $date) {
+            $date = HelperDate::getToday();
+        } else {
+            $date = HelperDateTime::getOnlyDate($date);
+        }
+
         self::explode($date, $day, $month, $year);
 
         if (!$short) {
