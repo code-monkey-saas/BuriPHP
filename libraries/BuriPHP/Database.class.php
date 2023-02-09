@@ -16,8 +16,6 @@ namespace Libraries\BuriPHP;
 use BuriPHP\Settings;
 use Medoo\Medoo;
 
-include_once PATH_BURIPHP_LIBRARIES . 'Medoo.php';
-
 class Database
 {
     /**

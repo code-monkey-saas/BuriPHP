@@ -85,7 +85,7 @@ class Settings extends AppSettings
 
     /**
      * Tipo de base de datos.
-     * @example MySQL, MariaDB, MSSQL, PostgreSQL, Oracle, Sybase
+     * @example MySQL, MariaDB, MSSQL, PgSQL, Oracle, Sybase
      *
      * @static
      *

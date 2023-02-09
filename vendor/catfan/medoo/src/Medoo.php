@@ -6,10 +6,10 @@ declare(strict_types=1);
  *
  * The Lightweight PHP Database Framework to Accelerate Development.
  *
- * @version 2.1.7
+ * @version 2.1.8
  * @author Angel Lai
  * @package Medoo
- * @copyright Copyright 2022 Medoo Project, Angel Lai.
+ * @copyright Copyright 2023 Medoo Project, Angel Lai.
  * @license https://opensource.org/licenses/MIT
  * @link https://medoo.in
  */
@@ -438,7 +438,8 @@ class Medoo
             in_array($this->type, ['mysql', 'pgsql', 'sybase', 'mssql']) &&
             isset($options['charset'])
         ) {
-            $commands[] = "SET NAMES '{$options['charset']}'" . ($this->type === 'mysql' && isset($options['collation']) ?
+            $commands[] = "SET NAMES '{$options['charset']}'" . (
+                $this->type === 'mysql' && isset($options['collation']) ?
                 " COLLATE '{$options['collation']}'" : ''
             );
         }
@@ -461,8 +462,8 @@ class Medoo
                         PDO::ERRMODE_WARNING,
                         PDO::ERRMODE_EXCEPTION
                     ]) ?
-                        $options['error'] :
-                        PDO::ERRMODE_SILENT
+                    $options['error'] :
+                    PDO::ERRMODE_SILENT
                 );
             }
 
@@ -866,7 +867,7 @@ class Medoo
             $operator = $match['operator'] ?? null;
 
             if ($isIndex && isset($match[4]) && in_array($operator, ['>', '>=', '<', '<=', '=', '!='])) {
-                $stack[] = "${column} ${operator} " . $this->columnQuote($match[4]);
+                $stack[] = "{$column} {$operator} " . $this->columnQuote($match[4]);
                 continue;
             }
 
@@ -954,7 +955,7 @@ class Medoo
                         }
 
                         if ($this->isRaw($value[0]) && $this->isRaw($value[1])) {
-                            $stack[] = "({$column} BETWEEN {$this->buildRaw($value[0],$map)} AND {$this->buildRaw($value[1],$map)})";
+                            $stack[] = "({$column} BETWEEN {$this->buildRaw($value[0], $map)} AND {$this->buildRaw($value[1], $map)})";
                         } else {
                             $stack[] = "({$column} BETWEEN {$mapKey}a AND {$mapKey}b)";
                             $dataType = (is_numeric($value[0]) && is_numeric($value[1])) ? PDO::PARAM_INT : PDO::PARAM_STR;
@@ -1293,15 +1294,16 @@ class Medoo
                             continue;
                         }
 
-                        $joins[] = (strpos($key, '.') > 0 ?
-                            // For ['tableB.column' => 'column']
-                            $this->columnQuote($key) :
+                        $joins[] = (
+                            strpos($key, '.') > 0 ?
+                                // For ['tableB.column' => 'column']
+                                $this->columnQuote($key) :
 
-                            // For ['column1' => 'column2']
-                            $table . '.' . $this->columnQuote($key)
+                                // For ['column1' => 'column2']
+                                $table . '.' . $this->columnQuote($key)
                         ) .
-                            ' = ' .
-                            $this->tableQuote($match['alias'] ?? $match['table']) . '.' . $this->columnQuote($value);
+                        ' = ' .
+                        $this->tableQuote($match['alias'] ?? $match['table']) . '.' . $this->columnQuote($value);
                     }
 
                     $relation = 'ON ' . implode(' AND ', $joins);
@@ -1316,7 +1318,7 @@ class Medoo
                 $tableName .= ' AS ' . $this->tableQuote($match['alias']);
             }
 
-            $tableJoin[] = $type[$match['join']] . " JOIN ${tableName} ${relation}";
+            $tableJoin[] = $type[$match['join']] . " JOIN {$tableName} {$relation}";
         }
 
         return implode(' ', $tableJoin);
@@ -1492,9 +1494,9 @@ class Medoo
         );
 
         $query .= ' RETURNING ' .
-            implode(', ', array_map([$this, 'columnQuote'], $returnColumns)) .
-            ' INTO ' .
-            implode(', ', array_keys($data));
+                    implode(', ', array_map([$this, 'columnQuote'], $returnColumns)) .
+                    ' INTO ' .
+                    implode(', ', array_keys($data));
 
         return $this->exec($query, $map, function ($statement) use (&$data) {
             // @codeCoverageIgnoreStart
@@ -1621,8 +1623,8 @@ class Medoo
 
                 $callback(
                     $isSingle ?
-                        $currentStack[$columnMap[$column][0]] :
-                        $currentStack
+                    $currentStack[$columnMap[$column][0]] :
+                    $currentStack
                 );
             } else {
                 $this->dataMap($data, $columns, $columnMap, $currentStack, true, $result);
@@ -1974,7 +1976,7 @@ class Medoo
         $orderRaw = $this->raw(
             $this->type === 'mysql' ? 'RAND()'
                 : ($this->type === 'mssql' ? 'NEWID()'
-                    : 'RANDOM()')
+                : 'RANDOM()')
         );
 
         if ($where === null) {
