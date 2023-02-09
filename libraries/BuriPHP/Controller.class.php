@@ -15,6 +15,8 @@ namespace Libraries\BuriPHP;
 
 use Libraries\BuriPHP\Helpers\HelperArray;
 use Libraries\BuriPHP\Helpers\HelperFile;
+use Libraries\BuriPHP\Helpers\HelperLog;
+use Libraries\BuriPHP\Helpers\HelperValidate;
 use Libraries\BuriPHP\Interfaces\iController;
 
 class Controller implements iController
@@ -26,7 +28,7 @@ class Controller implements iController
      * Busca si existe el service del controller.
      * Si existe, lo inicializa.
      */
-    final public function __construct()
+    final public function __construct(...$args)
     {
         if (method_exists($this, '__init')) {
             call_user_func_array(array($this, '__init'), []);
@@ -35,11 +37,18 @@ class Controller implements iController
         $controller = explode('\\', get_called_class());
         $controller = HelperArray::getLast($controller);
 
-        if (HelperFile::exists(PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $controller . SERVICE_PHP)) {
-            require_once PATH_MODULES . Router::getEndpoint()[1]['MODULE'] . DS . $controller . SERVICE_PHP;
+        $module = (isset($args['module']) && !empty($args['module'])) ? $args['module'] : Router::getEndpoint()[1]['MODULE'];
+
+        if (HelperFile::exists(PATH_MODULES . $module . DS . $controller . SERVICE_PHP)) {
+            require_once PATH_MODULES . $module . DS . $controller . SERVICE_PHP;
 
             $service = '\Services\\' . $controller;
-            $this->service = new $service();
+
+            if (isset($args['module']) && !empty($args['module'])) {
+                $this->service = new $service(module: $args['module']);
+            } else {
+                $this->service = new $service();
+            }
         }
 
         $this->view = new View();
@@ -154,5 +163,41 @@ class Controller implements iController
         }
 
         return $data;
+    }
+
+    /**
+     * Conecta un controlador de otro módulo.
+     */
+    final public function controllerShared($module, $controller)
+    {
+        try {
+            /**
+             * Verifica que exista el módulo.
+             */
+            if (!HelperValidate::isDir(PATH_MODULES . $module)) {
+                $exceptionMsg = "No existe el module: " . PATH_MODULES . $module;
+
+                HelperLog::saveError($exceptionMsg);
+                throw new \Exception($exceptionMsg);
+            }
+
+            /**
+             * Verifica que exista el controlador.
+             */
+            if (!HelperFile::exists(PATH_MODULES . $module . DS . $controller . CONTROLLER_PHP)) {
+                $exceptionMsg = "No existe el controller: " . PATH_MODULES . $module . DS . $controller . CONTROLLER_PHP;
+
+                HelperLog::saveError($exceptionMsg);
+                throw new \Exception($exceptionMsg);
+            } else {
+                require PATH_MODULES . $module . DS . $controller . CONTROLLER_PHP;
+
+                $controller = '\Controllers\\' . $controller;
+
+                return new $controller(module: $module);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
