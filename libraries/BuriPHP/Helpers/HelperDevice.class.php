@@ -30,7 +30,7 @@ abstract class HelperDevice
         if (preg_match('/linux/i', $userAgent)) {
             $platform = 'Linux';
         } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
-            $platform = 'Mac';
+            $platform = 'MacOS';
         } elseif (preg_match('/windows|win32/i', $userAgent)) {
             $platform = 'Windows';
         } else {
