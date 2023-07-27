@@ -752,7 +752,7 @@ abstract class HelperFile
     }
 
     /**
-     * Copa un archivo a otro. Por defecto no se sobreescribe.
+     * Copia un archivo a otro. Por defecto no se sobreescribe.
      * Lanza una excecpión si no se ha copiado por algún motivo
      * Se puede copiar entre diferentes directorios
      *
@@ -769,6 +769,27 @@ abstract class HelperFile
         }
         if (copy($sourceFile, $targetFile) === false) {
             throw new \Exception("No se puede copiar el archivo origen {$sourceFile} en el archivo destino {$targetFile}");
+        }
+    }
+
+    /**
+     * Mueve un archivo. Por defecto no se sobreescribe.
+     * Lanza una excecpión si no se ha movido por algún motivo
+     * Se puede mover entre diferentes directorios
+     *
+     * @param string $sourceFile
+     * @param string $targetFile
+     * @param bool   $overwrite
+     *
+     * @throws Exception
+     */
+    public static function move($sourceFile, $targetFile, $overwrite = false)
+    {
+        if (!$overwrite && file_exists($targetFile)) {
+            throw new \Exception("El archivo destino {$targetFile} ya existe y no se ha de sobreescribir");
+        }
+        if (move_uploaded_file($sourceFile, $targetFile) === false) {
+            throw new \Exception("No se puede mover el archivo origen {$sourceFile} en el archivo destino {$targetFile}");
         }
     }
 
@@ -956,7 +977,7 @@ abstract class HelperFile
 
             $path = self::getSanitizedPath($path . '/' . pathinfo($file['name'], PATHINFO_FILENAME) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION));
 
-            self::copy($file['tmp_name'], $path);
+            self::move($file['tmp_name'], $path);
 
             return $path;
         } catch (\Exception $e) {
