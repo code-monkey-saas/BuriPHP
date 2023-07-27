@@ -88,7 +88,7 @@ class View
         $renderBody = $this->includesDependencies($renderBody);
 
         // Eliminamos saltos de linea en blanco.
-        $renderBody = preg_replace("/[\r\n|\n|\r]+/", PHP_EOL, $renderBody);
+        $renderBody = preg_replace("/[\r\n]+/", PHP_EOL, $renderBody);
 
         return $renderBody;
     }
@@ -158,6 +158,7 @@ class View
                 $import = ob_get_contents();
                 ob_end_clean();
                 $view = str_replace('{{import|' . $nameFile . '}}', $import, $view);
+                $view = self::importFiles($view);
                 unset($import);
             } else {
                 $view = str_replace('{{import|' . $nameFile . '}}', '', $view);
@@ -237,7 +238,7 @@ class View
      */
     private function includesDependencies($view)
     {
-        preg_match_all("/\{{2}asset\|[a-zA-Z\|\{\$-=?\.\}\:\/]+}{2}/", $view, $includes, PREG_SET_ORDER);
+        preg_match_all("/\{{2}asset\|[a-zA-Z\|\{\$-_=?\.\}\:\/]+}{2}/", $view, $includes, PREG_SET_ORDER);
 
         $dependencies = [
             'css' => [],
@@ -250,10 +251,12 @@ class View
             $file = HelperArray::compact($file);
 
             foreach ($file as $_key => $_value) {
-                $x = explode(':', $_value);
+                if ($_key !== 1) {
+                    $x = explode(':', $_value);
 
-                if (count($x) == 2) {
-                    $file[$_key] = $x[0] . '="' . $x[1] . '"';
+                    if (count($x) == 2) {
+                        $file[$_key] = $x[0] . '="' . $x[1] . '"';
+                    }
                 }
             }
 
