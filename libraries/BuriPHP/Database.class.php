@@ -52,4 +52,60 @@ class Database
             'password' => $arr['password']
         ]);
     }
+
+    /**
+     * Convierte los keys en CamelCase de un array a SNAKE_CASE en mayúsculas.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    final static function camelToSnake($data)
+    {
+        if (is_array($data)) {
+            $response = [];
+
+            foreach ($data as $key => $value) {
+                if ($key !== strtoupper($key)) {
+                    $response[preg_replace('/(?<!^)[A-Z]/', '_$0', $key)] = $value;
+                } else {
+                    $response[$key] = $value;
+                }
+            }
+
+            return array_change_key_case($response, CASE_UPPER);
+        }
+
+        if (ctype_upper($data)) {
+            return strtoupper($data);
+        }
+
+        return strtoupper(preg_replace('/(?<!^)[A-Z]/', '_$0', $data));
+    }
+
+    /**
+     * Convierte los keys en SNAKE_CASE de un array a CamelCase.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    final static function snakeToCamel($data)
+    {
+        if (is_array($data)) {
+            $response = [];
+
+            foreach ($data as $k => $v) {
+                foreach ($v as $key => $value) {
+                    if ($key !== lcfirst(ucwords($key))) {
+                        $response[$k][lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($key)))))] = $value;
+                    }
+                }
+            }
+
+            return $response;
+        }
+
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($data)))));
+    }
 }
