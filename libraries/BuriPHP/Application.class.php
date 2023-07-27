@@ -70,10 +70,10 @@ final class Application
          * Verifica si esta permitido el REQUEST_METHOD.
          */
         if (
-            !HelperArray::existsValue(
+            true !== HelperArray::existsValue(
                 $GLOBALS['_APP']['ALLOWED_METHODS'],
                 HelperServer::getValue('REQUEST_METHOD')
-            )
+            ) && HelperServer::getValue('REQUEST_METHOD') !== 'OPTIONS'
         ) {
             HelperHeader::setContentType('json');
             HelperHeader::setStatusCode(405);
