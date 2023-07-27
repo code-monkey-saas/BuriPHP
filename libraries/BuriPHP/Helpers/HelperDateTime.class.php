@@ -61,6 +61,20 @@ abstract class HelperDateTime
     }
 
     /**
+     * Devuelve el día y hora actual en formato dd/mm/yyyy con la zona horaria
+     * hh:mm:ss
+     * Formato de fecha: yyyy-mm-dd hh.mm:ss
+     * @return string
+     */
+    public static function getNowTimezone()
+    {
+        $timestamp = time();
+        $dt = new \DateTime("now", new \DateTimeZone(Settings::$timeZone));
+        $dt->setTimestamp($timestamp);
+        return $dt->format('Y-m-d H:i:sP');
+    }
+
+    /**
      * Devuelve el día y hora actual en formato dd/mm/yyyy hh:mm:ss
      * Formato de fecha: yyyy-mm-dd hh.mm:ss
      * @return string
@@ -173,6 +187,25 @@ abstract class HelperDateTime
             ($date_r["mday"] + $dd),
             ($date_r["year"] + $yy)
         ));
+    }
+
+    /**
+     * Suma un número de meses a una fecha.
+     * Formato de fecha: yyyy-mm-dd.
+     *
+     * @param string $date
+     * @param int    $months
+     *
+     * @return string
+     */
+    public static function addMonthsToDate($date, $months)
+    {
+        $dt = new \DateTime($date, new \DateTimeZone(Settings::$timeZone));
+
+        $dt->setTimestamp(time());
+        $dt->modify("+{$months} month");
+
+        return $dt->format('Y-m-d H:i:sP');
     }
 
     /**
