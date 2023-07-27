@@ -154,7 +154,7 @@ abstract class HelperUrl
         if (false === strpos($url, '?')) {
             $sep = '?';
         }
-        $url .= $sep . "rnd=" . HelperString::createRandom($lenRandom);
+        $url .= $sep . "rnd=" . HelperString::random($lenRandom);
         return $url;
     }
 
