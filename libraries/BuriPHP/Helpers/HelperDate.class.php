@@ -15,6 +15,8 @@
 
 namespace Libraries\BuriPHP\Helpers;
 
+use IntlDateFormatter;
+
 abstract class HelperDate
 {
     /**
@@ -271,7 +273,7 @@ abstract class HelperDate
      *
      * @return int
      */
-    public static function getDate($date = false, $short = false)
+    public static function getDate($date = false, $short = false, $locale = 'es_ES')
     {
         if (false === $date) {
             $date = HelperDate::getToday();
@@ -279,13 +281,13 @@ abstract class HelperDate
             $date = HelperDateTime::getOnlyDate($date);
         }
 
-        self::explode($date, $day, $month, $year);
-
         if (!$short) {
-            return HelperDate::getDayName($date) . " " . $day . " de " . HelperDate::getMonthName($month) . " del " . $year;
+            $formatter = new IntlDateFormatter($locale, IntlDateFormatter::LONG, IntlDateFormatter::NONE);
         } else {
-            return $day . "/" . HelperDate::getMonthName($month) . "/" . $year;
+            $formatter = new IntlDateFormatter($locale, IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
         }
+
+        return $formatter->format(strtotime($date));
     }
 
     /**
@@ -316,7 +318,7 @@ abstract class HelperDate
      *
      * @return int
      */
-    public static function getDif($date1, $date2)
+    public static function getDiff($date1, $date2)
     {
         list($year1, $month1, $day1) = explode('-', $date1);
         list($year2, $month2, $day2) = explode('-', $date2);
@@ -333,7 +335,7 @@ abstract class HelperDate
      *
      * @return int
      */
-    public static function getDifDays($date1, $date2)
+    public static function getDiffDays($date1, $date2)
     {
         list($year1, $month1, $day1) = explode('-', $date1);
         list($year2, $month2, $day2) = explode('-', $date2);
@@ -563,6 +565,6 @@ abstract class HelperDate
      */
     public static function calculateAge($date)
     {
-        return intval(self::getDifDays($date, date("Y-m-d")) / 365);
+        return intval(self::getDiffDays($date, date("Y-m-d")) / 365);
     }
 }
