@@ -132,6 +132,13 @@ final class Application
             }
 
             /**
+             * Verifica que exista una clase con nombre del controlador.
+             */
+            if (HelperFile::exists(PATH_MODULES . $trace['MODULE'] . DS . $trace['CONTROLLER'] . CLASS_PHP)) {
+                require_once PATH_MODULES . $trace['MODULE'] . DS . $trace['CONTROLLER'] . CLASS_PHP;
+            }
+
+            /**
              * Verifica que exista el controlador.
              */
             if (!HelperFile::exists(PATH_MODULES . $trace['MODULE'] . DS . $trace['CONTROLLER'] . CONTROLLER_PHP)) {
@@ -141,6 +148,9 @@ final class Application
                 HelperLog::saveError($exceptionMsg);
                 throw new \Exception($exceptionMsg);
             } else {
+                define('MODULE_NAME', $trace['MODULE']);
+                define('MODULE_ROOT', PATH_MODULES . $trace['MODULE'] . DS);
+
                 require_once PATH_MODULES . $trace['MODULE'] . DS . $trace['CONTROLLER'] . CONTROLLER_PHP;
             }
 
