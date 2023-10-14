@@ -1,5 +1,6 @@
 {
     "require": {
+        "firebase/php-jwt": "^6.3",
         "catfan/medoo": "^2.1"
     }
 }

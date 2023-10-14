@@ -6,7 +6,7 @@ declare(strict_types=1);
  *
  * The Lightweight PHP Database Framework to Accelerate Development.
  *
- * @version 2.1.8
+ * @version 2.1.10
  * @author Angel Lai
  * @package Medoo
  * @copyright Copyright 2023 Medoo Project, Angel Lai.
@@ -51,14 +51,14 @@ class Raw
  * @method bool has(string $table, array $where)
  * @method mixed rand(string $table, array|string $column, array $where)
  * @method int count(string $table, array $where)
- * @method int max(string $table, string $column)
- * @method int min(string $table, string $column)
- * @method int avg(string $table, string $column)
- * @method int sum(string $table, string $column)
- * @method int max(string $table, string $column, array $where)
- * @method int min(string $table, string $column, array $where)
- * @method int avg(string $table, string $column, array $where)
- * @method int sum(string $table, string $column, array $where)
+ * @method string max(string $table, string $column)
+ * @method string min(string $table, string $column)
+ * @method string avg(string $table, string $column)
+ * @method string sum(string $table, string $column)
+ * @method string max(string $table, string $column, array $where)
+ * @method string min(string $table, string $column, array $where)
+ * @method string avg(string $table, string $column, array $where)
+ * @method string sum(string $table, string $column, array $where)
  */
 class Medoo
 {
@@ -1348,14 +1348,14 @@ class Medoo
 
                 $stack[$value] = isset($keyMatch['type']) ?
                     [$columnKey, $keyMatch['type']] :
-                    [$columnKey, 'String'];
+                    [$columnKey];
             } elseif ($this->isRaw($value)) {
                 preg_match('/([\p{L}_][\p{L}\p{N}@$#\-_]*\.)?(?<column>[\p{L}_][\p{L}\p{N}@$#\-_]*)(\s*\[(?<type>(String|Bool|Int|Number))\])?/u', $key, $keyMatch);
                 $columnKey = $keyMatch['column'];
 
                 $stack[$key] = isset($keyMatch['type']) ?
                     [$columnKey, $keyMatch['type']] :
-                    [$columnKey, 'String'];
+                    [$columnKey];
             } elseif (!is_int($key) && is_array($value)) {
                 if ($root && count(array_keys($columns)) === 1) {
                     $stack[$key] = [$key, 'String'];
@@ -1461,7 +1461,7 @@ class Medoo
                             break;
 
                         case 'String':
-                            $stack[$columnKey] = $item;
+                            $stack[$columnKey] = (string) $item;
                             break;
                     }
                 } else {
