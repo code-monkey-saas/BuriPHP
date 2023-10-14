@@ -1,9 +1,5 @@
-<div id="page">
-    {{import|header.php}}
-
-    <main id="main-content">
-        <h1>Hello world!</h1>
-    </main>
-
-    {{import|footer.php}}
-</div>
+<main class="wrapper">
+    <div class="container">
+        <h1 class="mt-4">{{translate|home.hello}}</h1>
+    </div>
+</main>
