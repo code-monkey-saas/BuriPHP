@@ -82,6 +82,7 @@ class View
             $renderBody = str_replace('{{renderView}}', $renderBody, $renderBase);
         }
 
+        $renderBody = $this->includesModals($renderBody);
         $renderBody = $this->importFiles($renderBody);
         $renderBody = $this->replaceVars($renderBody);
         $renderBody = $this->replacePaths($renderBody);
@@ -295,6 +296,44 @@ class View
         }
 
         $view = str_replace('{$jsDependencies}', '', $view);
+
+        return $view;
+    }
+
+    /**
+     * Incluye los modals.
+     * 
+     * @param string $view
+     * 
+     * @return string
+     */
+    private function includesModals($view)
+    {
+        preg_match_all("/\{{2}modal\|[a-zA-Z_\/\.]+\}{2}/", $view, $placeholders, PREG_SET_ORDER);
+        $modals = "";
+
+        foreach ($placeholders as $value) {
+            $nameFile = HelperString::getBetween($value[0], '{{modal|', '}}');
+            $file = explode('/', $nameFile);
+            $file = HelperArray::compact($file);
+
+            $file = (count($file) > 1) ?
+                HelperFile::getSanitizedPath(PATH_ROOT . DS . HelperArray::joinValues($file, '/')) :
+                HelperFile::getSanitizedPath(PATH_SHARED . HelperArray::joinValues($file, '/'));
+
+            if (HelperFile::exists($file)) {
+                ob_start();
+                require $file;
+                $modal = ob_get_contents();
+                ob_end_clean();
+                $modals .= $modal;
+                unset($modal);
+            }
+
+            $view = str_replace('{{modal|' . $nameFile . '}}', '', $view);
+        }
+
+        $view = str_replace('{{renderModals}}', $modals, $view);
 
         return $view;
     }
