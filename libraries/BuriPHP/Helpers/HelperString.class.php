@@ -531,7 +531,7 @@ abstract class HelperString
 
         list($arrDec, $arrSec) = explode(" ", $microTime);
 
-        $decHex = dechex($arrDec * 1000000);
+        $decHex = (int) dechex($arrDec * 1000000);
         $secHex = dechex($arrSec);
 
         self::guidSetLen($decHex, 5);
