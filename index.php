@@ -17,6 +17,10 @@ namespace BuriPHP;
 if (version_compare(PHP_VERSION, '8.0', '<'))
     die('Your host needs to use PHP 8.0 or higher to run this version of BuriPHP.');
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'defines.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'AppSettings.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Settings.php';
