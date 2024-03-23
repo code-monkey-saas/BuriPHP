@@ -149,13 +149,16 @@ abstract class HelperNumber
     /**
      * Devuelve un string unicamente con los números.
      *
-     * @param        $number
-     *
-     * @return string
+     * @param string|null $string
+     * @return string|null
      */
-    public static function getNumbers($number)
+    public static function getNumbers($string)
     {
-        return (string) preg_replace('/[^0-9]/', '', $number);
+        if (is_null($string)) {
+            return null;
+        }
+
+        return preg_replace('/[^0-9]/', '', $string);
     }
 
     /**
