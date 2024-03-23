@@ -977,7 +977,7 @@ abstract class HelperFile
 
             $path = self::getSanitizedPath($path . '/' . pathinfo($file['name'], PATHINFO_FILENAME) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION));
 
-            self::move($file['tmp_name'], $path);
+            self::copy($file['tmp_name'], $path);
 
             return $path;
         } catch (\Exception $e) {
