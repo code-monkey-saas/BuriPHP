@@ -15,44 +15,45 @@
 
 ## Features
 
-* **Lightweight** - Portable with only one file.
+* **Lightweight** - Single-file framework with minimal dependencies.
 
-* **Easy** - Easy to learn and use, with a friendly construction.
+* **Easy** - Simple and intuitive API for quick integration.
 
-* **Powerful** - Supports various common and complex SQL queries, data mapping and prevents SQL injection.
+* **Powerful** - Supports complex SQL queries, data mapping, and SQL injection prevention.
 
-* **Compatible** - Supports MySQL, MSSQL, SQLite, MariaDB, PostgreSQL, Sybase, Oracle, and more.
+* **Compatible** - Works with MySQL, MariaDB, PostgreSQL, SQLite, MSSQL, Oracle, Sybase, and more.
 
-* **Friendly** - Works well with every PHP framework, such as Laravel, Codeigniter, Yii, Slim, and frameworks that support singleton extension or composer.
+* **Friendly** - Integrates seamlessly with Laravel, CodeIgniter, Yii, Slim, and other PHP frameworks.
 
-* **Free** - Under the MIT license, you can use it anywhere, for whatever purpose.
+* **Free** - Licensed under MIT, free to use for any purpose.
 
 ## Requirements
 
-PHP 7.3+ and installed PDO extension.
+- PHP 7.3 or later
+- PDO extension enabled
 
 ## Get Started
 
 ### Install via composer
 
-Add Medoo to the composer.json configuration file.
-```
+Add Medoo to the `composer.json` configuration file.
+```bash
 $ composer require catfan/medoo
 ```
 
-And update the composer
-```
+Then update Composer
+```bash
 $ composer update
 ```
 
 ```php
-// Require Composer's autoloader.
+// Require Composer's autoloader
 require 'vendor/autoload.php';
 
-// Use the Medoo namespace.
+// Import Medoo namespace
 use Medoo\Medoo;
 
-// Connect to the database.
+// Initialize database connection
 $database = new Medoo([
     'type' => 'mysql',
     'host' => 'localhost',
@@ -61,11 +62,13 @@ $database = new Medoo([
     'password' => 'your_password'
 ]);
 
+// Insert data
 $database->insert('account', [
     'user_name' => 'foo',
     'email' => 'foo@bar.com'
 ]);
 
+// Retrieve data
 $data = $database->select('account', [
     'user_name',
     'email'
@@ -81,19 +84,25 @@ echo json_encode($data);
 // }]
 ```
 
-## Contribution Guides
+## Contribution Guidelines
+Before submitting a pull request, ensure compatibility with multiple database engines and include unit tests when possible.
 
-Before starting a new pull request, please ensure compatibility with other databases and write unit tests whenever possible.
+### Testing & Code Style
+- Run `phpunit tests` to execute unit tests.
+- Use `php-cs-fixer fix` to enforce code style consistency.
 
-Run `phpunit tests` for unit testing and `php-cs-fixer fix` to fix code style.
+### Commit Message Format
+Each commit should begin with a tag indicating the type of change:
 
-Each commit should start with a tag indicating the type of change: `[fix]`, `[feature]`, or `[update]`.
+- `[fix]` for bug fixes
+- `[feature]` for new features
+- `[update]` for improvements
 
-Please keep it simple and keep it clear.
+Keep contributions simple and well-documented.
 
 ## License
 
-Medoo is released under the MIT license.
+Medoo is released under the MIT License.
 
 ## Links
 
@@ -108,4 +117,4 @@ Medoo is released under the MIT license.
 ## Support Our Other Product
 [Gear Browser - Web Browser for Geek](https://gear4.app)
 
-[![Gear Browser](https://github-production-user-asset-6210df.s3.amazonaws.com/1467904/240102839-a597972c-458a-4f0e-9ef8-d4ad10ba0690.png)](https://gear4.app)
+[![Gear Browser](https://github.com/catfan/Medoo/assets/1467904/bc5059d4-6a2d-4bbf-90d9-a9f71bae3335)](https://gear4.app)

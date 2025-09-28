@@ -1,7 +1,2 @@
-logs/
-*.code-workspace
+.log
 .DS_Store
-.phpdoc/
-docs/
-/assets/uploads/*
-!/assets/uploads/.gitkeep

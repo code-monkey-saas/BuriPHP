@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Medoo\\' => array($vendorDir . '/catfan/medoo/src'),
-    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
 );
